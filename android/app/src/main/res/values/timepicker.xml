@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Widget.Material.Light.TimePicker" parent="android:Widget.Material.TimePicker">
+        <item name="android:timePickerMode">clock</item>
+        <item name="android:headerBackground">#ffffff</item>
+        <item name="android:numbersSelectorColor">@color/primary</item>
+        <item name="android:numbersBackgroundColor">#ffffff</item>
+        <item name="android:background">@color/primary</item>
+    </style>
+</resources>

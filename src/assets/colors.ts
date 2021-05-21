@@ -1,0 +1,17 @@
+export enum Colors {
+  HEADER_BG = 'white',
+  INPUT_BORDER_COLOR = 'rgba(0,0,0,0.1)',
+  INPUT_BG_COLOR = 'white',
+  TEXT_COLOR = 'rgba(0,0,0,0.6)',
+  BLACK_60 = 'rgba(0,0,0,0.6)',
+  BLACK_30 = 'rgba(0, 0, 0, 0.3)',
+  BLACK_10 = '#E1E2E7',
+  BLACK = '#000000',
+  LIGHT_GREY = 'rgba(225, 226, 231, 0.3)',
+  INPUT_LABEL = 'rgba(0,0,0,0.87)',
+  PRIMARY = '#E4F336',
+  GREY = '#808080',
+  SCREEN_BG = 'white',
+  GREY_BG = '#E1E2E7',
+  TEXT_ON_PRIMARY = '#000000',
+}

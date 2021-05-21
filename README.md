@@ -1,0 +1,30 @@
+
+## Initial setup
+Android versions
+- Android SDK Platform 29 with Intel x86 Atom_64 System Image
+- Android SDK Build tools 29.0.2
+- .bashrc
+```
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/tools/bin
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+```
+
+Watchman v2021.05.10.00
+
+React native 5.0.1-alpha.2
+
+Node 12.22.1
+
+
+## TODO
+
+Extend Button
+- OUTLINE type
+- SMALL size
+
+Finish AddRide
+
+- add icons from figma
