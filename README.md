@@ -1,4 +1,8 @@
+# Lifty 
 
+The prototype car sharing application for commuters.
+
+Currently only Android is supported.
 ## Initial setup
 Android versions
 - Android SDK Platform 29 with Intel x86 Atom_64 System Image
@@ -19,7 +23,7 @@ React native 5.0.1-alpha.2
 Node 12.22.1
 
 
-## TODO
+## TODO 
 
 Extend Button
 - OUTLINE type
@@ -28,3 +32,5 @@ Extend Button
 Finish AddRide
 
 - add icons from figma
+
+Uniform Color system
