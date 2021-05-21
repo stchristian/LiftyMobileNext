@@ -21,13 +21,7 @@ const RideMatchItem = ({match}: {match: RideMatch}) => {
     <View style={styles.match}>
       <View style={styles.matchLeft}>
         <Image source={profile_picture} style={styles.imageThumbnail} />
-        <Text
-          style={{
-            ...fontStyles.small,
-            ...fontStyles.bold,
-          }}>
-          {match.driverName}
-        </Text>
+        <Text style={fontStyles.small_bold}>{match.driverName}</Text>
       </View>
       <View style={styles.matchRight}>
         <Text style={{...fontStyles.normal_bold, ...spacingStyles.bottom_s}}>
@@ -152,7 +146,7 @@ const styles = StyleSheet.create({
     ...spacingStyles.bottom_s,
   },
   freePlacesLabel: {
-    ...fontStyles.default,
+    ...fontStyles.normal,
     color: Colors.SUCCESS,
     marginTop: 16,
   },

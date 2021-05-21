@@ -27,7 +27,7 @@ const Splash = ({navigation}: any) => {
     <View style={{...styles.screen}}>
       <Animated.Text
         style={{
-          ...fontStyles.default,
+          ...fontStyles.normal,
           ...fontStyles.title_xxl,
           ...styles.title,
           opacity: fadeB,

@@ -10,7 +10,7 @@ const Community = () => {
         {' '}
         Közösségek
       </Text>
-      <Text style={{...fontStyles.default}}>Válassz útvonalatv</Text>
+      <Text style={{...fontStyles.normal}}>Válassz útvonalatv</Text>
     </View>
   );
 };

@@ -85,16 +85,9 @@ const AddRide = ({
     <>
       <Header title="Utazás hozzáadása" />
       <ScrollView contentContainerStyle={screenStyles.default}>
-        <Text style={{...fontStyles.default, ...spacingStyles.bottom}}>
+        <Text style={{...fontStyles.normal, ...spacingStyles.bottom}}>
           Kiválasztott dátum:
-          <Text
-            style={{
-              ...fontStyles.default,
-              ...fontStyles.bold,
-            }}>
-            {' '}
-            {shortDateFormat(date)}
-          </Text>
+          <Text style={fontStyles.normal_bold}> {shortDateFormat(date)}</Text>
         </Text>
         <View style={{...styles.switch, ...spacingStyles.bottom}}>
           <TouchableWithoutFeedback onPress={() => setRole(Role.PASSANGER)}>
@@ -117,7 +110,7 @@ const AddRide = ({
           </TouchableWithoutFeedback>
         </View>
 
-        <Text style={{...fontStyles.default, ...spacingStyles.bottom}}>
+        <Text style={{...fontStyles.normal, ...spacingStyles.bottom}}>
           Melyik útvonalonadon utazol?
         </Text>
         <HorizontalSelect
@@ -131,13 +124,9 @@ const AddRide = ({
             <EndWayPoint label={selectedRoute.to} />
           </View>
         )}
-        <Text style={{...fontStyles.default, ...spacingStyles.bottom}}>
+        <Text style={{...fontStyles.normal, ...spacingStyles.bottom}}>
           Mikor indulsz?
-          <Text
-            style={{
-              ...fontStyles.default,
-              ...fontStyles.bold,
-            }}>
+          <Text style={fontStyles.normal_bold}>
             {' '}
             {timeSelected && getTime(date)}
           </Text>

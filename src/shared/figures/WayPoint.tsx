@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   waypointLabel: {
-    ...fontStyles.default,
+    ...fontStyles.normal,
     marginLeft: 8,
   },
 });

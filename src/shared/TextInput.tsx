@@ -7,9 +7,9 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {Icon} from 'react-native-vector-icons/Icon';
 import {Colors} from '../assets/colors';
 import fontStyles from '../assets/styles/font';
+
 export const TextInput = React.memo(
   ({
     value,
@@ -56,10 +56,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.INPUT_BG_COLOR,
     paddingHorizontal: 16,
     paddingVertical: 15.5,
-    ...fontStyles.textInput,
+    color: Colors.TEXT_COLOR,
+    ...fontStyles.normal,
   },
   label: {
+    ...fontStyles.tiny,
+    color: Colors.INPUT_LABEL,
     marginBottom: 4,
-    ...fontStyles.inputLabel,
   },
 });

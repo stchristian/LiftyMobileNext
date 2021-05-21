@@ -1,27 +1,6 @@
 import {StyleSheet} from 'react-native';
-import {Colors} from '../colors';
 
 export default StyleSheet.create({
-  textInput: {
-    fontFamily: 'Exo2',
-    fontSize: 14,
-    lineHeight: 17,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    color: Colors.TEXT_COLOR,
-  },
-  inputLabel: {
-    fontFamily: 'Exo2',
-    fontSize: 12,
-    lineHeight: 15,
-    fontStyle: 'normal',
-    fontWeight: '300',
-    color: Colors.INPUT_LABEL,
-  },
-  tiny: {
-    fontSize: 12,
-    lineHeight: 15,
-  },
   title_xxl: {
     fontFamily: 'Exo2_bold',
     fontSize: 50,
@@ -53,21 +32,24 @@ export default StyleSheet.create({
     lineHeight: 18,
   },
   small: {
+    fontFamily: "Exo2",
     fontSize: 14,
     lineHeight: 16,
   },
-  default: {
-    fontFamily: 'Exo2',
+  small_bold: {
+    fontFamily: "Exo2_bold",
     fontSize: 14,
-    lineHeight: 17,
+    lineHeight: 16,
   },
-  bold: {
-    fontFamily: 'Exo2_extrabold',
-    fontWeight: '800',
+  tiny: {
+    fontFamily: "Exo2",
+    fontSize: 12,
+    lineHeight: 15,
   },
-  header: {
-    fontSize: 32,
-    lineHeight: 38,
+  tiny_bold: {
+    fontFamily: "Exo2_bold",
+    fontSize: 12,
+    lineHeight: 15,
   },
   center: {
     textAlign: 'center',

@@ -15,9 +15,9 @@ LocaleConfig.defaultLocale = 'hu';
 const RideItem = ({name, from, to}: any) => {
   return (
     <View style={styles.rideItem}>
-      <Text style={{...fontStyles.default, ...fontStyles.bold}}>{name}</Text>
-      <Text style={{...fontStyles.default, ...fontStyles.tiny}}>{from}</Text>
-      <Text style={{...fontStyles.default, ...fontStyles.tiny}}>{to}</Text>
+      <Text style={fontStyles.normal_bold}>{name}</Text>
+      <Text style={fontStyles.tiny}>{from}</Text>
+      <Text style={fontStyles.tiny}>{to}</Text>
     </View>
   );
 };
@@ -147,13 +147,10 @@ const styles = StyleSheet.create({
   },
   header: {flexDirection: 'row'},
   headerMonth: {
-    ...fontStyles.default,
-    ...fontStyles.bold,
-    ...fontStyles.header,
+    ...fontStyles.title_xl,
   },
   headerYear: {
-    ...fontStyles.default,
-    ...fontStyles.header,
+    ...fontStyles.title_xl,
   },
   noRides: {
     textAlign: 'center',
@@ -169,9 +166,7 @@ const styles = StyleSheet.create({
     padding: screenStyles.default.padding,
   },
   myRidesHeader: {
-    ...fontStyles.default,
-    ...fontStyles.header,
-    ...fontStyles.bold,
+    ...fontStyles.title_xl,
     marginVertical: 16,
   },
   rideItem: {
