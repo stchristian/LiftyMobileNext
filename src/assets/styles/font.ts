@@ -69,4 +69,7 @@ export default StyleSheet.create({
     fontSize: 32,
     lineHeight: 38,
   },
+  center: {
+    textAlign: 'center',
+  },
 });

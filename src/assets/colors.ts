@@ -14,4 +14,6 @@ export enum Colors {
   SCREEN_BG = 'white',
   GREY_BG = '#E1E2E7',
   TEXT_ON_PRIMARY = '#000000',
+  LIGHT = '#ffffff',
+  SUCCESS = '#1ACD82',
 }

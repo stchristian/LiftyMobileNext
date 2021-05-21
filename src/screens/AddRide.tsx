@@ -78,7 +78,7 @@ const AddRide = ({
   );
 
   const handleAddRide = () => {
-    navigation.replace('RideMatches');
+    navigation.replace('RideMatches', {rideId: 'myRideId#123'});
   };
 
   return (

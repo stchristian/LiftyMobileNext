@@ -13,4 +13,10 @@ export default StyleSheet.create({
   bottom_xxl: {
     marginBottom: 58,
   },
+  margin_left: {
+    marginLeft: 16,
+  },
+  margin_left_s: {
+    marginLeft: 8,
+  },
 });

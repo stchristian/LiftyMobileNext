@@ -23,7 +23,7 @@ const RootStack = createStackNavigator<RootStackParamList>();
 
 export default React.memo(() => {
   return (
-    <RootStack.Navigator initialRouteName="Tab" mode="modal">
+    <RootStack.Navigator initialRouteName="Splash" mode="modal">
       <RootStack.Screen
         name="Splash"
         component={SplashScreen}
