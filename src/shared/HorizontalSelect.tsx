@@ -31,9 +31,7 @@ const HorizontalSelect = ({
             }}
             onPress={() => onSelect(option.value)}
             key={option.value}>
-            <Text style={{...fontStyles.normal, ...fontStyles.small}}>
-              {option.label}
-            </Text>
+            <Text style={fontStyles.small}>{option.label}</Text>
           </TouchableWithoutFeedback>
         ))}
       </ScrollView>

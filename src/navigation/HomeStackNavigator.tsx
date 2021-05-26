@@ -3,14 +3,16 @@ import {
   createStackNavigator,
   StackNavigationProp,
 } from '@react-navigation/stack';
-import {AddRouteParams, AddRouteScreen} from '../screens/AddRoute';
-import AddRideScreen, {AddRideParams} from '../screens/AddRide';
+import {AddRouteParams, AddRouteScreen} from 'screens/AddRoute';
+import AddRideScreen, {AddRideParams} from 'screens/AddRide';
 import RideMatches, {RideMatchesParams} from 'screens/RideMatches';
+import PersonalDetailsScreen from 'screens/PersonalDetails';
 
 export type HomeStackParamList = {
   AddRoute: AddRouteParams;
   AddRide: AddRideParams;
   RideMatches: RideMatchesParams;
+  PersonalDetails: {};
 };
 
 export type HomeStackNavigationProp = StackNavigationProp<HomeStackParamList>;
@@ -24,7 +26,9 @@ export default React.memo(() => {
         name="AddRoute"
         component={AddRouteScreen}
         initialParams={{}}
-        options={{headerShown: false}}
+        options={{
+          headerShown: false,
+        }}
       />
       <HomeStackNavigator.Screen
         name="AddRide"
@@ -36,6 +40,11 @@ export default React.memo(() => {
         name="RideMatches"
         component={RideMatches}
         initialParams={{}}
+        options={{headerShown: false}}
+      />
+      <HomeStackNavigator.Screen
+        name="PersonalDetails"
+        component={PersonalDetailsScreen}
         options={{headerShown: false}}
       />
     </HomeStackNavigator.Navigator>

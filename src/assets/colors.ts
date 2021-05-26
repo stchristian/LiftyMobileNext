@@ -1,14 +1,19 @@
 export enum Colors {
   //MATERIAL
   PRIMARY = '#E4F336',
-  PRIMARY_LIGHT = '#ffff6f',
+  PRIMARY_VARIANT = '#E4F336',
+  PRIMARY_LIGHT = '#f8fbc6',
   PRIMARY_DARK = '#aec000',
+  SECONDARY = '#808080',
+  SECONDARY_LIGHT = '#cccccc',
   SURFACE = '#ffffff',
   BACKGROUND = '#ffffff',
   ERROR = '#F84018',
   ON_PRIMARY = '#000000',
   ON_SURFACE = '#000000',
+  ON_SURFACE_MUTED = '#c7c7c7',
   ON_BACKGROUND = '#000000',
+  ON_SECONDARY = '#E4F336',
   //END MATERIAL
   HEADER_BG = 'white',
   INPUT_BORDER_COLOR = 'rgba(0,0,0,0.1)',

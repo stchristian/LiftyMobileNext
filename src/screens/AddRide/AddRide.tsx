@@ -6,17 +6,17 @@ import {
   View,
   TouchableWithoutFeedback,
 } from 'react-native';
-import fontStyles from '../assets/styles/font';
-import screenStyles from '../assets/styles/screen';
-import spacingStyles from '../assets/styles/spacing';
-import {Colors} from '../assets/colors';
-import {useMyRoutes} from '../hooks';
-import HorizontalSelect, {Option} from '../shared/HorizontalSelect';
+import fontStyles from 'assets/styles/font';
+import screenStyles from 'assets/styles/screen';
+import spacingStyles from 'assets/styles/spacing';
+import {Colors} from 'assets/colors';
+import {useMyRoutes} from 'hooks/index';
+import HorizontalSelect, {Option} from 'shared/HorizontalSelect';
 import {EndWayPoint, StartWayPoint} from 'shared/figures/WayPoint';
-import {Button, ButtonSize} from 'shared/Button';
+import {Button} from 'shared/Button';
 import Header from 'shared/Header';
 import {useTimePicker} from 'hooks/timepicker';
-import {shortDateFormat, time} from 'src/utils/locales';
+import {shortDateFormat} from 'src/utils/locales';
 import {getTime} from 'src/utils/date';
 
 export type AddRideParams = {
@@ -133,13 +133,13 @@ const AddRide = ({
         </Text>
         <View>
           <Button
-            size={ButtonSize.SMALL}
+            size="normal"
             onPress={() => showTimePicker(date.getHours(), date.getMinutes())}
             text="Idő kiválasztása"
           />
         </View>
         <View style={styles.bottom}>
-          <Button text="Hozzáadás" onPress={handleAddRide} />
+          <Button text="Hozzáadás" size="big" onPress={handleAddRide} />
         </View>
       </ScrollView>
     </>

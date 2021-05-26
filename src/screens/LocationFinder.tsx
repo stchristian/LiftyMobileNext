@@ -1,13 +1,20 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import {useState} from 'react';
-import {StyleSheet, View, FlatList, Text, ListRenderItem} from 'react-native';
+import {
+  StyleSheet,
+  FlatList,
+  Text,
+  ListRenderItem,
+  Pressable,
+} from 'react-native';
 import {LocationFinderProps} from '../navigation/Props';
-import screenStyles from '../assets/styles/screen';
-import {TouchableHighlight} from 'react-native-gesture-handler';
 import {Colors} from '../assets/colors';
 import fontStyles from '../assets/styles/font';
 import Header from 'shared/Header';
 import {TextInput} from 'shared/TextInput';
+import Screen from 'shared/Screen';
+import {useDebounce} from 'hooks/index';
+import {getPlaces} from 'src/api/google';
 export type LocationFinderParams = {initialValue?: string; resultKey: string};
 export type LocationOption = {
   label: string;
@@ -20,37 +27,66 @@ export default function LocationFinder({
   },
   navigation,
 }: LocationFinderProps) {
-  const [locationOptions, setLocationOptions] = useState<LocationOption[]>([
-    {label: '3600 Ózd, Egyház völgy 2', value: 123},
-    {label: '1115 Budapest, Etele út 40/b', value: 22},
-  ]);
+  const [keyword, setKeyword] = useState('');
+  const inputRef = useRef(null);
+  const [locationOptions, setLocationOptions] = useState<LocationOption[]>([]);
+  const debouncedKeyword = useDebounce(keyword, 1000);
+
+  useEffect(() => {
+    //@ts-ignore
+    inputRef.current && inputRef.current.focus();
+  }, []);
+
+  useEffect(() => {
+    let mounted = true;
+    if (debouncedKeyword) {
+      getPlaces(debouncedKeyword).then(candidates => {
+        console.log(candidates);
+        mounted &&
+          setLocationOptions(
+            candidates.map(candidate => ({
+              label: candidate.formatted_address,
+              value: candidate,
+            })),
+          );
+      });
+    } else {
+      setLocationOptions([]);
+    }
+    return () => {
+      mounted = false;
+    };
+  }, [debouncedKeyword]);
 
   const handleLocationSelected = (loc: LocationOption) => {
     navigation.navigate('AddRoute', {
-      [resultKey]: loc,
+      [resultKey]: loc.value,
     });
   };
 
   const renderItem: ListRenderItem<LocationOption> = ({item}) => (
-    <TouchableHighlight
+    <Pressable
       onPress={() => handleLocationSelected(item)}
       style={styles.listItem}>
-      <Text style={fontStyles.textInput}>{item.label}</Text>
-    </TouchableHighlight>
+      <Text style={fontStyles.normal}>{item.label}</Text>
+    </Pressable>
   );
 
   return (
-    <>
-      <Header title="Hely keresése">{/* <TextInput */}</Header>
-      <View style={screenStyles.default}>
-        <TextInput placeholder={'Keresés...'} />
-        <FlatList<LocationOption>
-          data={locationOptions}
-          renderItem={renderItem}
-          keyExtractor={item => item.value}
-        />
-      </View>
-    </>
+    <Screen header={<Header title="Hely keresése" />}>
+      <TextInput
+        placeholder={'Keresés...'}
+        rightIcon="my-location"
+        ref={inputRef}
+        onChangeText={text => setKeyword(text)}
+        onRightIconPress={() => console.log('HEY')}
+      />
+      <FlatList<LocationOption>
+        data={locationOptions}
+        renderItem={renderItem}
+        keyExtractor={item => item.value.place_id}
+      />
+    </Screen>
   );
   const [input, setInput] = useState('');
 
@@ -108,7 +144,6 @@ export default function LocationFinder({
 
 const styles = StyleSheet.create({
   listItem: {
-    // height: 48,
     marginHorizontal: 16,
     paddingVertical: 15.5,
     borderBottomColor: Colors.INPUT_BORDER_COLOR,

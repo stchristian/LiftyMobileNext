@@ -1,12 +1,16 @@
-import React from 'react';
-import {View} from 'react-native';
+import React, {useCallback, useState} from 'react';
+import {StyleSheet, View} from 'react-native';
 import {TextInput} from '../shared/TextInput';
 import MapView from '../shared/MapView';
 import {Button} from '../shared/Button';
-import screenStyles from '../assets/styles/screen';
 import spacingStyles from '../assets/styles/spacing';
 import {AddRouteProps} from '../navigation/Props';
 import Header from 'shared/Header';
+import Screen from 'shared/Screen';
+import {Marker, Polyline} from 'react-native-maps';
+import {Colors} from 'assets/colors';
+import {useRoute} from 'hooks/';
+import {useAddRouteRequest} from 'hooks/route';
 
 export type AddRouteParams = {
   source?: any;
@@ -20,6 +24,10 @@ export const AddRouteScreen = React.memo(
       params: {source, destination},
     },
   }: AddRouteProps) => {
+    const [name, setName] = useState('');
+    const route = useRoute(source?.place_id, destination?.place_id);
+    const addRouteRequest = useAddRouteRequest();
+
     const handleSourceFocus = () => {
       navigation.navigate('LocationFinder', {resultKey: 'source'});
     };
@@ -28,94 +36,83 @@ export const AddRouteScreen = React.memo(
       navigation.navigate('LocationFinder', {resultKey: 'destination'});
     };
 
-    return (
-      <>
-        <Header title="Útvonal hozzáadása" />
-        <View style={screenStyles.default}>
-          <View style={{flex: 1}}>
-            <MapView
-              style={{...spacingStyles.bottom, flex: 1, marginHorizontal: -16}}
-            />
-            <View style={{flex: 1}}>
-              <TextInput
-                label="Indulás"
-                value={source?.label}
-                style={spacingStyles.bottom}
-                onFocus={handleSourceFocus}
-              />
-              <TextInput
-                label="Érkezés"
-                value={destination?.label}
-                style={spacingStyles.bottom}
-                onFocus={handleDestinationFocus}
-              />
-            </View>
-          </View>
-          <Button text="Útvonal felvétele" onPress={() => {}} />
-        </View>
-      </>
-    );
+    const handleAddRoute = useCallback(() => {
+      addRouteRequest({
+        id: Date.now(),
+        name,
+        origin: {
+          placeId: source?.place_id,
+          address: source?.formatted_address,
+        },
+        destination: {
+          placeId: destination?.place_id,
+          address: destination?.formatted_address,
+        },
+      });
+      navigation.navigate('Tab', {screen: 'Profile', params: {}});
+    }, [addRouteRequest, source, destination, name, navigation]);
 
     return (
-      <Container>
-        <Navbar title={'Szokásos útvonal'} />
-        <Content contentContainerStyle={styles.container}>
-          <ScrollView
-            keyboardShouldPersistTaps="always"
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.srcollView}>
-            <Text style={styles.subTitle}>
-              Add meg azt a két pontot, amik között a leggyakrabban ingázol!
-            </Text>
-            <View style={styles.mapContainer}>
-              <MapView
-                provider={PROVIDER_GOOGLE}
-                style={styles.map}
-                customMapStyle={mapStyle}
-                region={{
-                  latitude: 47.497913,
-                  longitude: 19.040236,
-                  latitudeDelta: 0.1,
-                  longitudeDelta: 0.1,
-                }}>
-                {origin.latitude && <Marker key={'orig'} coordinate={origin} />}
-                {destination.latitude && (
-                  <Marker key={'dest'} coordinate={destination} />
-                )}
-              </MapView>
-            </View>
-            <PlacesAutoComplete
-              label="Indulási hely"
-              onPlaceSelect={handleOptionClicked}
+      <Screen header={<Header title="Útvonal hozzáadása" />}>
+        <MapView style={styles.map}>
+          {source && (
+            <Marker
+              key={'orig'}
+              coordinate={{
+                latitude: source.geometry.location.lat,
+                longitude: source.geometry.location.lng,
+              }}
+              pinColor={Colors.PRIMARY}
             />
-            <PlacesAutoComplete
-              label="Cél"
-              onPlaceSelect={handleOptionClicked}
+          )}
+          {destination && (
+            <Marker
+              key={'dest'}
+              coordinate={{
+                latitude: destination.geometry.location.lat,
+                longitude: destination.geometry.location.lng,
+              }}
+              pinColor={Colors.PRIMARY}
             />
-            <Item
-              underline={false}
-              rounded
-              style={styles.formItem}
-              error={!!errors.name}>
-              <FormItemLabel>Elnevezés</FormItemLabel>
-              <Icon type={'FontAwesome5'} name="route" style={styles.icon} />
-              <Input
-                onChangeText={text => {
-                  setValue('name', text);
-                }}
-              />
-            </Item>
-            {!!errors.name && <FormError>{errors.name.message}</FormError>}
-            <Button
-              full
-              rounded
-              style={styles.button}
-              onPress={handleSubmit(onSubmit)}>
-              <Text>tovább</Text>
-            </Button>
-          </ScrollView>
-        </Content>
-      </Container>
+          )}
+          {route && (
+            <Polyline
+              coordinates={route}
+              strokeColor={Colors.PRIMARY}
+              strokeWidth={6}
+            />
+          )}
+        </MapView>
+        <View style={{flex: 1}}>
+          <TextInput
+            label="Indulás"
+            value={source?.formatted_address}
+            style={spacingStyles.bottom}
+            onFocus={handleSourceFocus}
+          />
+          <TextInput
+            label="Érkezés"
+            value={destination?.formatted_address}
+            style={spacingStyles.bottom}
+            onFocus={handleDestinationFocus}
+          />
+          <TextInput
+            label="Név"
+            value={name}
+            style={spacingStyles.bottom}
+            onChangeText={text => setName(text)}
+          />
+        </View>
+        <Button text="Útvonal felvétele" size="big" onPress={handleAddRoute} />
+      </Screen>
     );
   },
 );
+
+const styles = StyleSheet.create({
+  map: {
+    ...spacingStyles.bottom,
+    flex: 1,
+    marginHorizontal: -16,
+  },
+});

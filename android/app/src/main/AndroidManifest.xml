@@ -24,6 +24,6 @@
       <!-- CUSTOM: Needed for google api -->
       <meta-data
         android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyB3c3OuZObeM7UI8-cumxNz3jNw4eez3QU"/>
+        android:value="AIzaSyDSdcWiZMi8BnJaVUyC-3MaBagmiDFx2rI"/>
     </application>
 </manifest>

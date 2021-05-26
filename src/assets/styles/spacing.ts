@@ -19,4 +19,10 @@ export default StyleSheet.create({
   margin_left_s: {
     marginLeft: 8,
   },
+  right: {
+    marginRight: 16,
+  },
+  right_s: {
+    marginRight: 8,
+  },
 });

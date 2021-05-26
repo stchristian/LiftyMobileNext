@@ -9,8 +9,7 @@ import profile_picture from 'assets/images/profile_picture.jpg';
 import {RideMatch} from 'src/types/Ride';
 import {useRide, useRideMatches} from 'src/hooks';
 import {getTime} from '../utils/date';
-import CircleFill from 'assets/icons/circle_fill.svg';
-import CircleOutline from 'assets/icons/circle_outline.svg';
+import RoutePresenter from 'shared/RoutePresenter';
 
 export type RideMatchesParams = {
   rideId: string;
@@ -27,14 +26,7 @@ const RideMatchItem = ({match}: {match: RideMatch}) => {
         <Text style={{...fontStyles.normal_bold, ...spacingStyles.bottom_s}}>
           {getTime(match.time)}
         </Text>
-        <View style={styles.row}>
-          <CircleFill />
-          <Text style={spacingStyles.margin_left_s}>{match.from}</Text>
-        </View>
-        <View style={styles.row}>
-          <CircleOutline />
-          <Text style={spacingStyles.margin_left_s}>{match.to}</Text>
-        </View>
+        <RoutePresenter from={match.from} to={match.to} />
         <Text style={styles.freePlacesLabel}>
           {match.freePlaces} szabad hely
         </Text>
@@ -61,14 +53,7 @@ const RideMatches = ({
               style={{...fontStyles.normal_bold, ...spacingStyles.bottom_s}}>
               {ride.routeName}
             </Text>
-            <View style={styles.row}>
-              <CircleFill />
-              <Text style={spacingStyles.margin_left_s}>{ride.from}</Text>
-            </View>
-            <View style={styles.row}>
-              <CircleOutline />
-              <Text style={spacingStyles.margin_left_s}>{ride.to}</Text>
-            </View>
+            <RoutePresenter from={ride.from} to={ride.to} />
           </View>
           <View style={styles.right}>
             <Text style={fontStyles.normal_bold}>Nov 11.</Text>

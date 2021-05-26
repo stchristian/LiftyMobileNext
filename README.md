@@ -34,3 +34,6 @@ Finish AddRide
 - add icons from figma
 
 Uniform Color system
+
+- marker can be replaced with image
+- waypoints

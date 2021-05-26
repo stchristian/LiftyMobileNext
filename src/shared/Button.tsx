@@ -1,80 +1,91 @@
 import React from 'react';
-import {View, Text, TouchableHighlight, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Pressable} from 'react-native';
 import {Colors} from 'src/assets/colors';
 import fontStyles from 'src/assets/styles/font';
-
-export enum ButtonType {
-  PRIMARY = 'primary',
-  SECONDARY = 'secondary',
-}
-
-export enum ButtonSize {
-  SMALL = 'small',
-  NORMAL = 'normal',
-  BIG = 'big',
-}
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export const Button = ({
   text,
-  size = ButtonSize.NORMAL,
+  leftIcon,
+  size = 'normal',
   fill = false,
-  type = ButtonType.PRIMARY,
+  type = 'primary',
   onPress,
   disabled = false,
+  style,
 }: {
   text: string;
-  size?: ButtonSize;
+  leftIcon?: string;
+  size?: 'normal' | 'big';
   fill?: boolean;
-  type?: ButtonType;
+  type?: 'primary' | 'secondary';
   onPress?: () => any;
   disabled?: boolean;
 }) => {
   return (
-    <TouchableHighlight
-      activeOpacity={0.7}
-      underlayColor="white"
-      onPress={onPress}
-      style={{borderRadius: 100}}>
-      <View style={{...styles.button, ...styles[type], ...styles[size]}}>
+    <View style={[styles.borderRadius, style]}>
+      <Pressable
+        onPress={onPress}
+        style={[
+          styles.button,
+          leftIcon ? styles.leftIconPad : {},
+          styles[type],
+          styles[size],
+        ]}
+        android_ripple={{
+          color:
+            type === 'primary' ? Colors.PRIMARY_LIGHT : Colors.SECONDARY_LIGHT,
+        }}>
+        {leftIcon && (
+          <Icon size={16} name={leftIcon} style={textStyles[type]} />
+        )}
         <Text
-          style={{
-            ...styles.text,
-            ...(size === ButtonSize.SMALL ? fontStyles.small : {}),
-          }}>
+          style={[
+            size === 'normal' ? fontStyles.small_bold : fontStyles.normal_bold,
+            textStyles[type],
+          ]}>
           {text}
         </Text>
-      </View>
-    </TouchableHighlight>
+      </Pressable>
+    </View>
   );
 };
+
+const textStyles = StyleSheet.create({
+  primary: {
+    color: Colors.ON_PRIMARY,
+  },
+  secondary: {
+    color: Colors.ON_SECONDARY,
+  },
+});
 
 const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
     width: 'auto',
-    paddingVertical: 15,
-    overflow: 'hidden',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  borderRadius: {
     borderRadius: 100,
+    overflow: 'hidden',
   },
-  small: {
-    alignSelf: 'flex-start',
-    paddingHorizontal: 15,
+  leftIconPad: {
+    paddingLeft: 8,
+  },
+  normal: {
     paddingVertical: 10,
+    paddingHorizontal: 16,
   },
-  text: {
-    fontFamily: 'Exo2_bold',
-    fontSize: 18,
-    lineHeight: 20,
-    fontWeight: '600',
+  big: {
+    paddingVertical: 16,
+    paddingHorizontal: 24,
   },
-  normal: {},
-  big: {},
   primary: {
     backgroundColor: Colors.PRIMARY,
-    color: Colors.BLACK,
   },
   secondary: {
-    backgroundColor: Colors.GREY,
-    color: Colors.PRIMARY,
+    backgroundColor: Colors.SECONDARY,
   },
 });

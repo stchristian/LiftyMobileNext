@@ -60,7 +60,7 @@ const MyRides = ({navigation}: any) => {
             backgroundColor: Colors.PRIMARY,
           },
           text: {
-            color: Colors.TEXT_ON_PRIMARY,
+            color: Colors.ON_PRIMARY,
           },
         },
       })),
@@ -100,6 +100,7 @@ const MyRides = ({navigation}: any) => {
         theme={{
           textDayFontFamily: 'Exo2',
           textDayHeaderFontFamily: 'Exo2',
+          todayTextColor: Colors.PRIMARY,
         }}
         markingType="custom"
         markedDates={markedDates}
@@ -134,7 +135,11 @@ const MyRides = ({navigation}: any) => {
           </Text>
         )}
         {selectedDate && (
-          <Button text="Utazás hozzáadása" onPress={handleAddRideRequest} />
+          <Button
+            text="Utazás hozzáadása"
+            size="big"
+            onPress={handleAddRideRequest}
+          />
         )}
       </View>
     </ScrollView>

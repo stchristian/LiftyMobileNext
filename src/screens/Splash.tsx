@@ -1,5 +1,6 @@
 import React, {useEffect, useRef} from 'react';
-import {View, StyleSheet, Animated} from 'react-native';
+import {StyleSheet, Animated} from 'react-native';
+import Screen from 'shared/Screen';
 import {Colors} from '../assets/colors';
 import fontStyles from '../assets/styles/font';
 
@@ -24,26 +25,22 @@ const Splash = ({navigation}: any) => {
   }, [fadeA, fadeB, navigation]);
 
   return (
-    <View style={{...styles.screen}}>
+    <Screen
+      statusBarHidden={true}
+      customScreenStyle={styles.screen}
+      noPadding={true}>
       <Animated.Text
-        style={{
-          ...fontStyles.normal,
-          ...fontStyles.title_xxl,
-          ...styles.title,
-          opacity: fadeB,
-        }}>
+        style={[fontStyles.title_xxl, styles.title, {opacity: fadeB}]}>
         lifty
       </Animated.Text>
-      <Animated.View style={{...styles.mottoContainer, opacity: fadeA}} />
-    </View>
+      <Animated.View style={[styles.mottoContainer, {opacity: fadeA}]} />
+    </Screen>
   );
 };
 
 const styles = StyleSheet.create({
   screen: {
     alignItems: 'center',
-    backgroundColor: Colors.SCREEN_BG,
-    flex: 1,
   },
   title: {
     position: 'absolute',
@@ -51,6 +48,7 @@ const styles = StyleSheet.create({
   },
   mottoContainer: {
     flex: 1,
+    flexGrow: 1,
     marginTop: 200,
     backgroundColor: Colors.PRIMARY,
     alignSelf: 'stretch',
