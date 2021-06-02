@@ -13,12 +13,15 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/core';
 import {useMyRoutes} from 'hooks/route';
 import RouteCard from 'shared/RouteCard';
+import {useLogout} from 'hooks/auth';
 
-const MenuItem = ({label, icon, routeParams}: any) => {
+const MenuItem = ({label, icon, routeParams, onPress}: any) => {
   const navigation = useNavigation();
+
   const handlePress = useCallback(() => {
     routeParams && navigation.navigate(...routeParams);
-  }, [navigation, routeParams]);
+    onPress && onPress();
+  }, [navigation, routeParams, onPress]);
 
   return (
     <Pressable
@@ -36,6 +39,7 @@ const MenuItem = ({label, icon, routeParams}: any) => {
 const Profile = ({navigation}: any) => {
   const user = useCurrentUser();
   const routes = useMyRoutes();
+  const logout = useLogout();
   console.log('routes', routes);
 
   const menuItems = useMemo(
@@ -49,16 +53,13 @@ const Profile = ({navigation}: any) => {
         label: 'Utazások',
         icon: 'event',
       },
-      // {
-      //   label: 'Útvonalak',
-      //   icon: 'map',
-      // },
       {
         label: 'Kijelentkezés',
         icon: 'logout',
+        onPress: logout,
       },
     ],
-    [],
+    [logout],
   );
 
   const handleRequestNewRoute = () => {

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "170915345517",
+    "firebase_url": "https://lifty-backend.firebaseio.com",
+    "project_id": "lifty-backend",
+    "storage_bucket": "lifty-backend.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:170915345517:android:f3d8bcb11edb73566afb64",
+        "android_client_info": {
+          "package_name": "com.liftymobilenext"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "170915345517-9g5dpj8r44je0nh8f5renkcn0d14r54e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoGzXfi0Z0mrV31abA4tSveM5XJx2lgnA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "170915345517-9g5dpj8r44je0nh8f5renkcn0d14r54e.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "170915345517-6508orc129vco6vod9apfholfc6a1113.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.lifty.liftyapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

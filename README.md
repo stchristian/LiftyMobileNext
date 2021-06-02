@@ -22,6 +22,23 @@ React native 5.0.1-alpha.2
 
 Node 12.22.1
 
+## Firebase settings
+
+[@react-native-firebase/app](https://rnfirebase.io/)
+
+1. Added Android app to the firebase project.
+2. `google-services.json` is a file provided by Firebase, should be present in android/app/
+3. include `classpath 'com.google.gms:google-services:4.3.8'` in android/build.gradle
+4. include
+```
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services' // <- Add this line
+```
+in android/app/build.gradle
+
+### Firebase authentication
+
+via [@react-native-firebase/auth](https://rnfirebase.io/auth/usage)
 
 ## TODO 
 

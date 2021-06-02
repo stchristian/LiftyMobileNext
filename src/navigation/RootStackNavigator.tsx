@@ -10,6 +10,8 @@ import LocationFinder, {
 import {NavigatorScreenParams} from '@react-navigation/core';
 import TabNavigator, {TabParamList} from './TabNavigator';
 import SplashScreen from '../screens/Splash';
+import {useAuthListener} from 'hooks/auth';
+import {useAppSelector} from 'hooks/store';
 export type RootStackParamList = {
   Splash: {};
   HomeStack: NavigatorScreenParams<HomeStackParamList>;
@@ -22,8 +24,12 @@ export type RootStackNavigationProps = StackNavigationProp<RootStackParamList>;
 const RootStack = createStackNavigator<RootStackParamList>();
 
 export default React.memo(() => {
+  const rootState = useAppSelector(state => state);
+  console.log('APP ROOT STATE', JSON.stringify(rootState, null, 2));
+  useAuthListener();
+
   return (
-    <RootStack.Navigator initialRouteName="Tab" mode="modal">
+    <RootStack.Navigator initialRouteName="Splash" mode="modal">
       <RootStack.Screen
         name="Splash"
         component={SplashScreen}

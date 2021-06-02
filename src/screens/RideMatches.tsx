@@ -10,6 +10,7 @@ import {RideMatch} from 'src/types/Ride';
 import {useRide, useRideMatches} from 'src/hooks';
 import {getTime} from '../utils/date';
 import RoutePresenter from 'shared/RoutePresenter';
+import Screen from 'shared/Screen';
 
 export type RideMatchesParams = {
   rideId: string;
@@ -44,36 +45,32 @@ const RideMatches = ({
   const {loading, rideMatches} = useRideMatches(ride);
 
   return (
-    <>
-      <Header title={'Utazás egyeztetés'} />
-      <View style={screenStyles.default}>
-        <View style={{...styles.container, ...spacingStyles.bottom_l}}>
-          <View style={styles.left}>
-            <Text
-              style={{...fontStyles.normal_bold, ...spacingStyles.bottom_s}}>
-              {ride.routeName}
-            </Text>
-            <RoutePresenter from={ride.from} to={ride.to} />
-          </View>
-          <View style={styles.right}>
-            <Text style={fontStyles.normal_bold}>Nov 11.</Text>
-            <Text>{getTime(ride.time)}</Text>
-          </View>
+    <Screen header={<Header title="Utazás egyeztetés" />}>
+      <View style={{...styles.container, ...spacingStyles.bottom_l}}>
+        <View style={styles.left}>
+          <Text style={{...fontStyles.normal_bold, ...spacingStyles.bottom_s}}>
+            {ride.routeName}
+          </Text>
+          <RoutePresenter from={ride.from} to={ride.to} />
         </View>
-        <Text
-          style={{
-            ...fontStyles.title_s,
-            ...styles.resultsTitle,
-            ...spacingStyles.bottom,
-          }}>
-          Találatok
-        </Text>
-        {rideMatches &&
-          rideMatches.map(match => (
-            <RideMatchItem match={match} key={match.rideId} />
-          ))}
+        <View style={styles.right}>
+          <Text style={fontStyles.normal_bold}>Nov 11.</Text>
+          <Text>{getTime(ride.time)}</Text>
+        </View>
       </View>
-    </>
+      <Text
+        style={{
+          ...fontStyles.title_s,
+          ...styles.resultsTitle,
+          ...spacingStyles.bottom,
+        }}>
+        Találatok
+      </Text>
+      {rideMatches &&
+        rideMatches.map(match => (
+          <RideMatchItem match={match} key={match.rideId} />
+        ))}
+    </Screen>
   );
 };
 

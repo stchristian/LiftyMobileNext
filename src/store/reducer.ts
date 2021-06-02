@@ -1,5 +1,6 @@
-import {ADD_ROUTE} from './actions';
+import {ADD_ROUTE, SET_USER} from './actions';
 import {AnyAction} from 'redux';
+import {User} from 'src/types/User';
 
 const initialState = {
   routes: [
@@ -16,6 +17,8 @@ const initialState = {
       },
     },
   ] as any[],
+  user: null as User | null,
+  userSetAt: null as Date | null,
 };
 
 export type StoreState = typeof initialState;
@@ -26,6 +29,12 @@ export default function (state = initialState, action: AnyAction) {
       return {
         ...state,
         routes: [...state.routes, action.payload],
+      };
+    case SET_USER:
+      return {
+        ...state,
+        user: action.payload,
+        userSetAt: new Date(),
       };
     default:
       return state;
