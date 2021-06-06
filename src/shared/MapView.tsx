@@ -1,21 +1,37 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {StyleSheet, ViewStyle, Dimensions} from 'react-native';
-import RNMapView from 'react-native-maps';
+import RNMapView, {Polyline} from 'react-native-maps';
 import mapStyle from '../assets/mapStyle.json';
-import Screen from './Screen';
+import {Route} from 'lifty-types';
+import {transformPolylineToCoordinatesFormat} from 'src/utils/route';
 
 // export const Marker = ({ key, coordinate }) => {
 //   return <Marker key={key} coordinate =/>
 // }
 
+const padding = {
+  top: 20,
+  bottom: 20,
+  left: 20,
+  right: 20,
+};
+
+export type RouteProp = {
+  route: Route;
+  color: string;
+  strokeWidth?: number;
+};
+
 const MapView = ({
   height = 200,
   style,
   children,
+  routes = [],
 }: {
   height?: number;
   style?: ViewStyle;
   children?: any;
+  routes?: RouteProp[];
 }) => {
   const [width, setWidth] = useState(Dimensions.get('window').width - 1);
   const [region, setRegion] = useState({
@@ -26,28 +42,52 @@ const MapView = ({
   });
 
   const mapRef = useRef<RNMapView>(null);
-  useEffect(() => {
-    if (children && mapRef.current) {
-      mapRef.current.fitToElements(true);
-    }
-    return () => {};
-  }, [children]);
+  // useEffect(() => {
+  //   if (fitToMarkers && mapRef.current) {
+  //     console.log('fitt', mapRef.current.state);
+  // mapRef.current.fitToSuppliedMarkers(fitToMarkers);
+  //   }
+  // }, [fitToMarkers]);
 
+  const polylineDataPoints = useMemo(() => {
+    return routes.map(routeProp => ({
+      decodedPolyline: transformPolylineToCoordinatesFormat(
+        routeProp.route.polyline,
+      ),
+      color: routeProp.color,
+      key: routeProp.route._id,
+      strokeWidth: routeProp?.strokeWidth || 4,
+    }));
+  }, [routes]);
+  console.log(polylineDataPoints);
   return (
     <RNMapView
       provider="google"
       style={{...styles.map, height, width, ...style}}
       customMapStyle={mapStyle}
       ref={mapRef}
-      mapPadding={{
-        top: 20,
-        bottom: 20,
-        left: 20,
-        right: 20,
+      mapPadding={padding}
+      onMapReady={() => {
+        // setWidth(width + 1);
+        setTimeout(() => {
+          mapRef.current!.fitToElements(true);
+        }, 100);
+        // console.log(mapRef.current?.state, children);
       }}
-      onMapReady={() => setWidth(width + 1)}
+      loadingEnabled={true}
       initialRegion={region}>
       {children}
+
+      {polylineDataPoints.length > 0
+        ? polylineDataPoints.map(dp => (
+            <Polyline
+              key={dp.key}
+              coordinates={dp.decodedPolyline}
+              strokeColor={dp.color}
+              strokeWidth={dp.strokeWidth}
+            />
+          ))
+        : null}
     </RNMapView>
   );
 };
@@ -56,4 +96,4 @@ const styles = StyleSheet.create({
   map: {},
 });
 
-export default MapView;
+export default React.memo(MapView);

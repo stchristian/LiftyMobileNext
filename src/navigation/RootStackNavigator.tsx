@@ -25,8 +25,7 @@ const RootStack = createStackNavigator<RootStackParamList>();
 
 export default React.memo(() => {
   const rootState = useAppSelector(state => state);
-  console.log('APP ROOT STATE', JSON.stringify(rootState, null, 2));
-  useAuthListener();
+  // console.log('APP ROOT STATE', JSON.stringify(rootState, null, 2));
 
   return (
     <RootStack.Navigator initialRouteName="Splash" mode="modal">
@@ -38,11 +37,6 @@ export default React.memo(() => {
       <RootStack.Screen
         name="HomeStack"
         component={StackNavigator}
-        options={{headerShown: false}}
-      />
-      <RootStack.Screen
-        name="Tab"
-        component={TabNavigator}
         options={{headerShown: false}}
       />
       <RootStack.Screen

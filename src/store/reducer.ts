@@ -1,36 +1,44 @@
-import {ADD_ROUTE, SET_USER} from './actions';
-import {AnyAction} from 'redux';
+import * as ActionTypes from './actions';
 import {User} from 'src/types/User';
+import {Route} from 'lifty-types';
+import * as actionsCreators from './actionCreators';
 
 const initialState = {
-  routes: [
-    {
-      destination: {
-        address: 'Farkaslyuk, 3608 Magyarország',
-        placeId: 'ChIJY1m1yZt_QEcRoIQeDCnEAAQ',
-      },
-      id: 1621889785978,
-      name: 'Melóba',
-      origin: {
-        address: 'Ózd, Egyház völgy 2, 3600 Magyarország',
-        placeId: 'ChIJTZSLsp6AP0cR3cPUG79_PyA',
-      },
-    },
-  ] as any[],
+  routes: [] as Route[],
   user: null as User | null,
   userSetAt: null as Date | null,
 };
 
-export type StoreState = typeof initialState;
+type StoreState = typeof initialState;
+type Actions = typeof actionsCreators;
+type Action = ReturnType<Actions[keyof Actions]>;
 
-export default function (state = initialState, action: AnyAction) {
+export default function (state = initialState, action: Action) {
   switch (action.type) {
-    case ADD_ROUTE:
+    case ActionTypes.SET_MY_ROUTES:
+      return {
+        ...state,
+        routes: action.payload,
+      };
+
+    case ActionTypes.UPDATE_ROUTE:
+      return {
+        ...state,
+        routes: state.routes.map(route =>
+          route._id === action.payload._id
+            ? {
+                ...route,
+                ...action.payload.partial,
+              }
+            : route,
+        ),
+      };
+    case ActionTypes.ADD_ROUTE:
       return {
         ...state,
         routes: [...state.routes, action.payload],
       };
-    case SET_USER:
+    case ActionTypes.SET_USER:
       return {
         ...state,
         user: action.payload,

@@ -1,15 +1,12 @@
-import {useAuthRedirect} from 'hooks/auth';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {StyleSheet, Animated} from 'react-native';
 import Screen from 'shared/Screen';
 import {Colors} from '../assets/colors';
 import fontStyles from '../assets/styles/font';
 
 const Splash = ({navigation}: any) => {
-  const [animFinished, setAnimFinished] = useState(false);
   const fadeA = useRef(new Animated.Value(0)).current;
   const fadeB = useRef(new Animated.Value(0)).current;
-  const authRedirect = useAuthRedirect();
 
   useEffect(() => {
     Animated.timing(fadeA, {
@@ -22,17 +19,10 @@ const Splash = ({navigation}: any) => {
         duration: 500,
         useNativeDriver: true,
       }).start(() => {
-        setTimeout(() => setAnimFinished(true), 1000);
+        setTimeout(() => navigation.replace('HomeStack'), 1000);
       });
     });
   }, [fadeA, fadeB, navigation]);
-
-  useEffect(() => {
-    if (animFinished) {
-      console.log('authredirect running');
-      authRedirect();
-    }
-  }, [authRedirect, animFinished]);
 
   return (
     <Screen

@@ -55,14 +55,6 @@ export const useRideMatches = (ride: Ride) => {
   };
 };
 
-export const useCurrentUser = () => {
-  return {
-    id: '678',
-    name: 'Kiss Ernő',
-    email: 'kiss.erno@gmail.com',
-  };
-};
-
 export function useDebounce(value: any, delay: number) {
   // State and setters for debounced value
   const [debouncedValue, setDebouncedValue] = useState(value);
@@ -83,29 +75,3 @@ export function useDebounce(value: any, delay: number) {
   );
   return debouncedValue;
 }
-
-export const useRoute = (sourcePlaceId?: any, destinationPlaceId?: any) => {
-  const [route, setRoute] = useState<LatLng[] | null>(null);
-  useEffect(() => {
-    let mounted = true;
-    if (sourcePlaceId && destinationPlaceId) {
-      getDirections(sourcePlaceId, destinationPlaceId).then(data => {
-        if ((data.status = 'OK' && data.routes.length === 1 && mounted)) {
-          setRoute(
-            decode(data.routes[0].overview_polyline.points).map(
-              ([lat, lng]) => ({
-                latitude: lat,
-                longitude: lng,
-              }),
-            ),
-          );
-        }
-      });
-    }
-    return () => {
-      mounted = false;
-    };
-  }, [sourcePlaceId, destinationPlaceId]);
-
-  return route;
-};

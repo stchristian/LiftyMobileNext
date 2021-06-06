@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {TextInput} from '../shared/TextInput';
 import MapView from '../shared/MapView';
@@ -9,24 +9,100 @@ import Header from 'shared/Header';
 import Screen from 'shared/Screen';
 import {Marker, Polyline} from 'react-native-maps';
 import {Colors} from 'assets/colors';
-import {useRoute} from 'hooks/';
-import {useAddRouteRequest} from 'hooks/route';
+import {
+  useAddRouteRequest,
+  useDecodedPolyline,
+  useRouteById,
+  useRoutePolyline,
+} from 'hooks/route';
+import {StackActions} from '@react-navigation/routers';
 
 export type AddRouteParams = {
   source?: any;
   destination?: any;
+  routeId?: string;
 };
 
 export const AddRouteScreen = React.memo(
   ({
     navigation,
     route: {
-      params: {source, destination},
+      params: {routeId, source, destination},
     },
   }: AddRouteProps) => {
-    const [name, setName] = useState('');
-    const route = useRoute(source?.place_id, destination?.place_id);
+    const inEditMode = !!routeId;
+    const routeToEdit = useRouteById(routeId);
+
+    const [name, setName] = useState(inEditMode ? routeToEdit!.name : '');
+
+    const polyline = useRoutePolyline(source?.place_id, destination?.place_id);
+    const decodedPolyline = useDecodedPolyline(
+      polyline ?? (inEditMode ? routeToEdit!.polyline : null),
+    );
+
     const addRouteRequest = useAddRouteRequest();
+
+    const originAddress = useMemo(
+      () =>
+        source
+          ? source.formatted_address
+          : routeToEdit
+          ? routeToEdit.originAddress
+          : '',
+      [source, routeToEdit],
+    );
+
+    const destinationAddress = useMemo(
+      () =>
+        destination
+          ? destination.formatted_address
+          : routeToEdit
+          ? routeToEdit.destinationAddress
+          : '',
+      [destination, routeToEdit],
+    );
+
+    const originCoordinate = useMemo(() => {
+      if (source) {
+        return {
+          latitude: source.geometry.location.lat,
+          longitude: source.geometry.location.lng,
+        };
+      }
+      if (routeToEdit) {
+        const {
+          geoData: {
+            origin: {coordinates},
+          },
+        } = routeToEdit;
+        return {
+          latitude: coordinates[1],
+          longitude: coordinates[0],
+        };
+      }
+      return null;
+    }, [routeToEdit, source]);
+
+    const destinationCoordinate = useMemo(() => {
+      if (destination) {
+        return {
+          latitude: destination.geometry.location.lat,
+          longitude: destination.geometry.location.lng,
+        };
+      }
+      if (routeToEdit) {
+        const {
+          geoData: {
+            destination: {coordinates},
+          },
+        } = routeToEdit;
+        return {
+          latitude: coordinates[1],
+          longitude: coordinates[0],
+        };
+      }
+      return null;
+    }, [routeToEdit, destination]);
 
     const handleSourceFocus = () => {
       navigation.navigate('LocationFinder', {resultKey: 'source'});
@@ -36,63 +112,53 @@ export const AddRouteScreen = React.memo(
       navigation.navigate('LocationFinder', {resultKey: 'destination'});
     };
 
-    const handleAddRoute = useCallback(() => {
+    const handleAddRoute = useCallback(async () => {
       addRouteRequest({
-        id: Date.now(),
         name,
-        origin: {
-          placeId: source?.place_id,
-          address: source?.formatted_address,
-        },
-        destination: {
-          placeId: destination?.place_id,
-          address: destination?.formatted_address,
-        },
+        originAddress: source?.formatted_address,
+        destinationAddress: destination?.formatted_address,
+        originGooglePlaceId: source?.place_id,
+        destinationGooglePlaceId: destination?.place_id,
+        polyline,
       });
       navigation.navigate('Tab', {screen: 'Profile', params: {}});
-    }, [addRouteRequest, source, destination, name, navigation]);
+    }, [source, destination, name, navigation, polyline, addRouteRequest]);
 
     return (
       <Screen header={<Header title="Útvonal hozzáadása" />}>
         <MapView style={styles.map}>
-          {source && (
+          {originCoordinate && (
             <Marker
               key={'orig'}
-              coordinate={{
-                latitude: source.geometry.location.lat,
-                longitude: source.geometry.location.lng,
-              }}
+              coordinate={originCoordinate}
               pinColor={Colors.PRIMARY}
             />
           )}
-          {destination && (
+          {destinationCoordinate && (
             <Marker
               key={'dest'}
-              coordinate={{
-                latitude: destination.geometry.location.lat,
-                longitude: destination.geometry.location.lng,
-              }}
+              coordinate={destinationCoordinate}
               pinColor={Colors.PRIMARY}
             />
           )}
-          {route && (
+          {decodedPolyline && (
             <Polyline
-              coordinates={route}
+              coordinates={decodedPolyline}
               strokeColor={Colors.PRIMARY}
               strokeWidth={6}
             />
           )}
         </MapView>
-        <View style={{flex: 1}}>
+        <View style={styles.form}>
           <TextInput
             label="Indulás"
-            value={source?.formatted_address}
+            value={originAddress}
             style={spacingStyles.bottom}
             onFocus={handleSourceFocus}
           />
           <TextInput
             label="Érkezés"
-            value={destination?.formatted_address}
+            value={destinationAddress}
             style={spacingStyles.bottom}
             onFocus={handleDestinationFocus}
           />
@@ -102,6 +168,17 @@ export const AddRouteScreen = React.memo(
             style={spacingStyles.bottom}
             onChangeText={text => setName(text)}
           />
+          {inEditMode ? (
+            <Button
+              text="Demó matchek"
+              onPress={() => {
+                //@ts-ignore
+                navigation.dispatch(
+                  StackActions.replace('DemoMatches', {routeId}),
+                );
+              }}
+            />
+          ) : null}
         </View>
         <Button text="Útvonal felvétele" size="big" onPress={handleAddRoute} />
       </Screen>
@@ -114,5 +191,8 @@ const styles = StyleSheet.create({
     ...spacingStyles.bottom,
     flex: 1,
     marginHorizontal: -16,
+  },
+  form: {
+    flex: 1,
   },
 });

@@ -11,7 +11,6 @@ const Login = () => {
   const [email, setEmail] = useState('hubner.krisztian97@gmail.com');
   const [password, setPassword] = useState('liftyapp');
   const login = useLogin();
-
   return (
     <Screen>
       <View style={styles.container}>
@@ -26,6 +25,7 @@ const Login = () => {
         <TextInput
           label="Jelszó *"
           value={password}
+          type="password"
           onChangeText={text => setPassword(text)}
         />
       </View>

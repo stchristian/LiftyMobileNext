@@ -21,9 +21,8 @@ const Screen = ({
       {header}
       {scrollable ? (
         <ScrollView
-          style={{flex: 1}}
+          style={styles.scrollViewContainer}
           contentContainerStyle={[
-            styles.scrollViewContainer,
             noPadding ? {} : styles.padding,
             customScreenStyle,
           ]}>
@@ -49,6 +48,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollViewContainer: {
+    flex: 1,
     backgroundColor: Colors.SCREEN_BG,
   },
   view: {

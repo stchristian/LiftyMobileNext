@@ -1,17 +1,34 @@
 import auth from '@react-native-firebase/auth';
-import {useNavigation} from '@react-navigation/core';
+import {StackActions, useNavigation} from '@react-navigation/core';
 import {useCallback, useEffect} from 'react';
-import {setUser} from 'src/store/actionCreators';
+import {getMyRoutes} from 'src/api/callables';
+import {getUserInfo} from 'src/api/firestore';
+import {setMyRoutes, setUser} from 'src/store/actionCreators';
 import {useAppDispatch, useAppSelector} from './store';
 
 const authInstance = auth();
 
 export const useAuthListener = () => {
   const dispatch = useAppDispatch();
-
   const onAuthStateChanged = useCallback(
-    user => {
-      dispatch(setUser(user));
+    async user => {
+      console.log('AUTH STATE CHANGED', !!user);
+      if (user === null) {
+        return dispatch(setUser(null));
+      }
+      const [info, routes] = await Promise.all([
+        getUserInfo(user.uid),
+        getMyRoutes(),
+      ]);
+      console.log(routes);
+
+      dispatch(
+        setUser({
+          ...user,
+          ...info,
+        }),
+      );
+      dispatch(setMyRoutes(routes));
     },
     [dispatch],
   );
@@ -23,14 +40,15 @@ export const useAuthListener = () => {
 };
 
 export const useAuthRedirect = () => {
-  const navigation = useNavigation();
   const userSetAt = useAppSelector(state => state.userSetAt);
   const user = useAppSelector(state => state.user);
+  const navigation = useNavigation();
+
   return useCallback(() => {
     if (userSetAt && user) {
-      navigation.navigate('Tab');
+      navigation.dispatch(StackActions.replace('Tab'));
     } else if (userSetAt && user === null) {
-      navigation.navigate('HomeStack', {screen: 'Login'});
+      navigation.dispatch(StackActions.replace('HomeStack'));
     }
   }, [userSetAt, user, navigation]);
 };
@@ -45,4 +63,8 @@ export const useLogout = () => {
   return useCallback(() => {
     authInstance.signOut();
   }, []);
+};
+
+export const useLoggedInUser = () => {
+  return useAppSelector(state => state.user);
 };

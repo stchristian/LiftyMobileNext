@@ -4,6 +4,7 @@ import Community from 'screens/Community';
 import MyRides from 'screens/MyRides';
 import Profile from 'screens/Profile';
 import BottomTabBar from 'shared/BottomTabBar';
+import {useLoggedInUser} from 'hooks/auth';
 export type TabParamList = {
   Community: {};
   MyRides: {};
@@ -13,6 +14,10 @@ export type TabParamList = {
 const Tab = createBottomTabNavigator<TabParamList>();
 
 export default function TabNavigator() {
+  const user = useLoggedInUser();
+
+  if (!user) return null;
+
   return (
     <Tab.Navigator
       initialRouteName="Profile"

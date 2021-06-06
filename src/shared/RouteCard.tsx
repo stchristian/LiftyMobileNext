@@ -2,14 +2,14 @@ import {Colors} from 'assets/colors';
 import font from 'assets/styles/font';
 import spacing from 'assets/styles/spacing';
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Pressable} from 'react-native';
 import RoutePresenter from './RoutePresenter';
 
-const RouteCard = ({route, style}: any) => {
+const RouteCard = ({route, style, onPress}: any) => {
   return (
-    <View style={[styles.card, style]}>
+    <Pressable style={[styles.card, style]} onPress={onPress}>
       <Text style={[font.title_s, spacing.bottom_s]}>{route.name}</Text>
-      <RoutePresenter
+      {/* <RoutePresenter
         from={route.origin.address}
         to={route.destination.address}
         style={spacing.bottom_s}
@@ -20,8 +20,8 @@ const RouteCard = ({route, style}: any) => {
           backgroundColor: Colors.SURFACE,
           marginHorizontal: -16,
           marginBottom: -16,
-        }}></View>
-    </View>
+        }}></View> */}
+    </Pressable>
   );
 };
 

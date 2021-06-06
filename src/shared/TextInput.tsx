@@ -12,7 +12,7 @@ import fontStyles from '../assets/styles/font';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export const TextInput = React.forwardRef<
-  React.LegacyRef<RNTextInput>,
+  RNTextInput,
   {
     rightIcon?: string;
     value?: string;
@@ -23,6 +23,7 @@ export const TextInput = React.forwardRef<
     inputProps?: Partial<TextInputProps>;
     style?: ViewStyle;
     onFocus?: () => any;
+    type?: 'password';
   }
 >(
   (
@@ -36,6 +37,7 @@ export const TextInput = React.forwardRef<
       placeholder,
       rightIcon,
       onRightIconPress,
+      type,
     },
     ref,
   ) => {
@@ -52,6 +54,7 @@ export const TextInput = React.forwardRef<
             placeholder={placeholder}
             placeholderTextColor={Colors.BLACK_30}
             ref={ref}
+            secureTextEntry={type === 'password'}
             // {...inputProps}
           />
           {rightIcon && (

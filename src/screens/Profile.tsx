@@ -13,7 +13,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/core';
 import {useMyRoutes} from 'hooks/route';
 import RouteCard from 'shared/RouteCard';
-import {useLogout} from 'hooks/auth';
+import {useLoggedInUser, useLogout} from 'hooks/auth';
 
 const MenuItem = ({label, icon, routeParams, onPress}: any) => {
   const navigation = useNavigation();
@@ -37,10 +37,9 @@ const MenuItem = ({label, icon, routeParams, onPress}: any) => {
 };
 
 const Profile = ({navigation}: any) => {
-  const user = useCurrentUser();
+  const user = useLoggedInUser();
   const routes = useMyRoutes();
   const logout = useLogout();
-  console.log('routes', routes);
 
   const menuItems = useMemo(
     () => [
@@ -66,11 +65,23 @@ const Profile = ({navigation}: any) => {
     navigation.navigate('HomeStack', {screen: 'AddRoute'});
   };
 
+  const handleEditRouteRequest = (routeId: string) => {
+    navigation.navigate('HomeStack', {
+      screen: 'AddRoute',
+      params: {
+        routeId,
+      },
+    });
+  };
+
   return (
     <Screen scrollable>
       <View style={[styles.row, spacing.bottom]}>
         <ProfilePicture size="big" style={spacing.right} />
-        <Text style={fontStyles.title_xl}>{user.name}</Text>
+        <Text
+          style={
+            fontStyles.title_s
+          }>{`${user.lastName} ${user.firstName}`}</Text>
       </View>
       <View style={[styles.row, spacing.bottom]}>
         <Button
@@ -82,9 +93,26 @@ const Profile = ({navigation}: any) => {
         <Button leftIcon="add" text="Autó" type="secondary" />
       </View>
       <Text style={[font.small, font.muted, spacing.bottom_s]}>Útvonalak</Text>
-      {routes.map(route => (
-        <RouteCard route={route} key={route.name} style={spacing.bottom} />
-      ))}
+      {routes.length > 0 ? (
+        routes.map(route => (
+          <RouteCard
+            route={route}
+            key={route.name}
+            style={spacing.bottom}
+            onPress={() => handleEditRouteRequest(route._id)}
+          />
+        ))
+      ) : (
+        <Text
+          style={[
+            fontStyles.tiny,
+            fontStyles.muted,
+            fontStyles.center,
+            spacing.bottom_l,
+          ]}>
+          Nincs megjeleníthető útvonal
+        </Text>
+      )}
       <Text style={[font.small, font.muted, spacing.bottom_s]}>Profil</Text>
       <View style={[styles.menu, spacing.bottom]}>
         {menuItems.map(item => (
