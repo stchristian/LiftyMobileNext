@@ -1,5 +1,5 @@
-import React, {useCallback, useMemo, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import {StyleSheet, View, ScrollView, Text} from 'react-native';
 import {TextInput} from '../shared/TextInput';
 import MapView from '../shared/MapView';
 import {Button} from '../shared/Button';
@@ -12,10 +12,14 @@ import {Colors} from 'assets/colors';
 import {
   useAddRouteRequest,
   useDecodedPolyline,
+  useDeleteRouteRequest,
   useRouteById,
   useRoutePolyline,
 } from 'hooks/route';
 import {StackActions} from '@react-navigation/routers';
+import spacing from '../assets/styles/spacing';
+import font from 'assets/styles/font';
+import utilities from 'assets/styles/utilities';
 
 export type AddRouteParams = {
   source?: any;
@@ -30,8 +34,17 @@ export const AddRouteScreen = React.memo(
       params: {routeId, source, destination},
     },
   }: AddRouteProps) => {
-    const inEditMode = !!routeId;
     const routeToEdit = useRouteById(routeId);
+    const inEditMode = !!routeToEdit;
+
+    console.debug('Add Route Render', navigation.isFocused());
+
+    useEffect(() => {
+      console.debug('Add Route mounted');
+      return () => {
+        console.debug('Add route unmounted');
+      };
+    }, []);
 
     const [name, setName] = useState(inEditMode ? routeToEdit!.name : '');
 
@@ -41,6 +54,7 @@ export const AddRouteScreen = React.memo(
     );
 
     const addRouteRequest = useAddRouteRequest();
+    const deleteRouteRequest = useDeleteRouteRequest();
 
     const originAddress = useMemo(
       () =>
@@ -125,7 +139,16 @@ export const AddRouteScreen = React.memo(
     }, [source, destination, name, navigation, polyline, addRouteRequest]);
 
     return (
-      <Screen header={<Header title="Útvonal hozzáadása" />}>
+      <Screen
+        header={
+          <Header
+            title={inEditMode ? 'Útvonal szerkesztése' : 'Útvonal hozzáadása'}
+          />
+        }
+        scrollable>
+        <Text style={[font.small, spacing.bottom]}>
+          Add meg azt az útvonalat amelyik között a leggyakrabban ingázol!
+        </Text>
         <MapView style={styles.map}>
           {originCoordinate && (
             <Marker
@@ -169,18 +192,34 @@ export const AddRouteScreen = React.memo(
             onChangeText={text => setName(text)}
           />
           {inEditMode ? (
-            <Button
-              text="Demó matchek"
-              onPress={() => {
-                //@ts-ignore
-                navigation.dispatch(
-                  StackActions.replace('DemoMatches', {routeId}),
-                );
-              }}
-            />
+            <>
+              <Button
+                text="Demó matchek"
+                onPress={() => {
+                  //@ts-ignore
+                  navigation.dispatch(
+                    StackActions.replace('DemoMatches', {routeId}),
+                  );
+                }}
+                style={spacing.bottom}
+              />
+              <Button
+                text="Útvonal törlése"
+                onPress={() => {
+                  navigation.popToTop();
+                  deleteRouteRequest(routeId!);
+                  //@ts-ignore
+                }}
+                style={spacing.bottom}
+              />
+            </>
           ) : null}
         </View>
-        <Button text="Útvonal felvétele" size="big" onPress={handleAddRoute} />
+        <Button
+          text={inEditMode ? 'Mentés' : 'Hozzáadás'}
+          size="big"
+          onPress={handleAddRoute}
+        />
       </Screen>
     );
   },
@@ -189,8 +228,8 @@ export const AddRouteScreen = React.memo(
 const styles = StyleSheet.create({
   map: {
     ...spacingStyles.bottom,
-    flex: 1,
-    marginHorizontal: -16,
+    height: 300,
+    ...utilities.fluid,
   },
   form: {
     flex: 1,

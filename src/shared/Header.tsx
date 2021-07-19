@@ -19,7 +19,13 @@ const Header = ({children, title, withBackButton = true}: any) => {
           <BackIcon />
         </TouchableOpacity>
       )}
-      <Text style={styles.title}>{title}</Text>
+      <Text
+        style={[
+          styles.title,
+          withBackButton ? styles.titleWithBackButton : undefined,
+        ]}>
+        {title}
+      </Text>
       {children}
     </View>
   );
@@ -36,8 +42,10 @@ const styles = StyleSheet.create({
     borderColor: 'red',
   },
   title: {
-    marginLeft: 16,
     ...fontStyles.title_m,
+  },
+  titleWithBackButton: {
+    marginLeft: 16,
   },
 });
 

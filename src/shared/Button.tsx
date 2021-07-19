@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, Pressable} from 'react-native';
+import {View, Text, StyleSheet, Pressable, ViewStyle} from 'react-native';
 import {Colors} from 'src/assets/colors';
 import fontStyles from 'src/assets/styles/font';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -21,6 +21,7 @@ export const Button = ({
   type?: 'primary' | 'secondary';
   onPress?: () => any;
   disabled?: boolean;
+  style?: ViewStyle;
 }) => {
   return (
     <View style={[styles.borderRadius, style]}>

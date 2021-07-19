@@ -25,7 +25,7 @@ const RootStack = createStackNavigator<RootStackParamList>();
 
 export default React.memo(() => {
   const rootState = useAppSelector(state => state);
-  // console.log('APP ROOT STATE', JSON.stringify(rootState, null, 2));
+  console.log('APP ROOT STATE', JSON.stringify(rootState, null, 2));
 
   return (
     <RootStack.Navigator initialRouteName="Splash" mode="modal">

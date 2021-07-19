@@ -40,6 +40,13 @@ in android/app/build.gradle
 
 via [@react-native-firebase/auth](https://rnfirebase.io/auth/usage)
 
+## Demo apk build
+
+cd android
+./gradlew assembleRelease
+
+Host apk
+
 ## TODO 
 
 Extend Button

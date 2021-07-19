@@ -1,10 +1,10 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {StyleSheet, ViewStyle, Dimensions} from 'react-native';
-import RNMapView, {Polyline} from 'react-native-maps';
+import RNMapView, {LatLng, Polyline} from 'react-native-maps';
 import mapStyle from '../assets/mapStyle.json';
 import {Route} from 'lifty-types';
 import {transformPolylineToCoordinatesFormat} from 'src/utils/route';
-
+// import {  } from "module";
 // export const Marker = ({ key, coordinate }) => {
 //   return <Marker key={key} coordinate =/>
 // }
@@ -42,12 +42,6 @@ const MapView = ({
   });
 
   const mapRef = useRef<RNMapView>(null);
-  // useEffect(() => {
-  //   if (fitToMarkers && mapRef.current) {
-  //     console.log('fitt', mapRef.current.state);
-  // mapRef.current.fitToSuppliedMarkers(fitToMarkers);
-  //   }
-  // }, [fitToMarkers]);
 
   const polylineDataPoints = useMemo(() => {
     return routes.map(routeProp => ({
@@ -59,7 +53,17 @@ const MapView = ({
       strokeWidth: routeProp?.strokeWidth || 4,
     }));
   }, [routes]);
-  console.log(polylineDataPoints);
+
+  useEffect(() => {
+    if (polylineDataPoints && mapRef.current) {
+      mapRef.current.fitToCoordinates(
+        polylineDataPoints.reduce((coords, route) => {
+          return [...coords, ...route.decodedPolyline];
+        }, [] as LatLng[]),
+      );
+    }
+  }, [polylineDataPoints]);
+
   return (
     <RNMapView
       provider="google"
@@ -68,13 +72,12 @@ const MapView = ({
       ref={mapRef}
       mapPadding={padding}
       onMapReady={() => {
-        // setWidth(width + 1);
+        setWidth(width + 1);
         setTimeout(() => {
           mapRef.current!.fitToElements(true);
         }, 100);
         // console.log(mapRef.current?.state, children);
       }}
-      loadingEnabled={true}
       initialRegion={region}>
       {children}
 

@@ -62,15 +62,12 @@ const Profile = ({navigation}: any) => {
   );
 
   const handleRequestNewRoute = () => {
-    navigation.navigate('HomeStack', {screen: 'AddRoute'});
+    navigation.push('AddRoute');
   };
 
   const handleEditRouteRequest = (routeId: string) => {
-    navigation.navigate('HomeStack', {
-      screen: 'AddRoute',
-      params: {
-        routeId,
-      },
+    navigation.push('AddRoute', {
+      routeId,
     });
   };
 

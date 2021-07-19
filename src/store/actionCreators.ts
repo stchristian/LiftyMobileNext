@@ -25,3 +25,11 @@ export function updateRoute(_id: string, partial: Partial<Route>) {
     partial,
   });
 }
+
+export function resetStore() {
+  return createAction(ActionTypes.RESET_STORE);
+}
+
+export function deleteRoute(routeId: string) {
+  return createAction(ActionTypes.DELETE_ROUTE, routeId);
+}

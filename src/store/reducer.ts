@@ -44,6 +44,13 @@ export default function (state = initialState, action: Action) {
         user: action.payload,
         userSetAt: new Date(),
       };
+    case ActionTypes.RESET_STORE:
+      return initialState;
+    case ActionTypes.DELETE_ROUTE:
+      return {
+        ...state,
+        routes: state.routes.filter(route => route._id !== action.payload),
+      };
     default:
       return state;
   }

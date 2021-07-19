@@ -2,37 +2,51 @@ import {Colors} from 'assets/colors';
 import font from 'assets/styles/font';
 import spacing from 'assets/styles/spacing';
 import React from 'react';
-import {View, Text, StyleSheet, Pressable} from 'react-native';
+import {View, Text, StyleSheet, Pressable, ViewStyle} from 'react-native';
 import RoutePresenter from './RoutePresenter';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Route} from 'lifty-types';
 
-const RouteCard = ({route, style, onPress}: any) => {
+const RouteCard = ({
+  route,
+  style,
+  onPress,
+}: {
+  route: Route;
+  style?: ViewStyle;
+  onPress: () => any;
+}) => {
   return (
     <Pressable style={[styles.card, style]} onPress={onPress}>
-      <Text style={[font.title_s, spacing.bottom_s]}>{route.name}</Text>
-      {/* <RoutePresenter
-        from={route.origin.address}
-        to={route.destination.address}
+      <View style={[styles.title, spacing.bottom_s]}>
+        <Icon name="map-marker-path" size={16} color={Colors.ON_SECONDARY} />
+        <Text style={[font.small_bold, font.secondary, spacing.margin_left_s]}>
+          {route.name}
+        </Text>
+      </View>
+      <RoutePresenter
+        type="secondary"
+        from={route.originAddress}
+        to={route.destinationAddress}
         style={spacing.bottom_s}
       />
-      <View
-        style={{
-          height: 100,
-          backgroundColor: Colors.SURFACE,
-          marginHorizontal: -16,
-          marginBottom: -16,
-        }}></View> */}
     </Pressable>
   );
 };
 
 const styles = StyleSheet.create({
+  title: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+  },
   card: {
     borderRadius: 24,
-    backgroundColor: Colors.PRIMARY,
+    backgroundColor: Colors.SECONDARY,
     // elevation: 5,
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
     overflow: 'hidden',
-    elevation: 10,
+    // elevation: 10,
   },
 });
 

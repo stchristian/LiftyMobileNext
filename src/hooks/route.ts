@@ -1,10 +1,13 @@
 import {useCallback, useMemo, useState, useEffect} from 'react';
-import {addRoute, updateRoute} from 'src/store/actionCreators';
-import {addRoute as addRouteCallable, getMatches} from 'src/api/callables';
+import {addRoute, deleteRoute, updateRoute} from 'src/store/actionCreators';
+import {
+  addRoute as addRouteCallable,
+  getMatches,
+  deleteRoute as deleteRouteCallable,
+} from 'src/api/callables';
 import {useAppSelector, useAppDispatch} from './store';
 import {getDirections} from 'src/api/google';
 import {LatLng} from 'react-native-maps';
-import {decode} from '@googlemaps/polyline-codec';
 import {AddRouteRequest, Route} from 'lifty-types';
 import {transformPolylineToCoordinatesFormat} from 'src/utils/route';
 
@@ -92,4 +95,18 @@ export const useRouteMatches = (routeId: string) => {
     };
   }, [routeId]);
   return routes;
+};
+
+export const useDeleteRouteRequest = () => {
+  const dispatch = useAppDispatch();
+
+  return useCallback(
+    (routeId: string) => {
+      deleteRouteCallable({
+        routeId,
+      });
+      dispatch(deleteRoute(routeId));
+    },
+    [dispatch],
+  );
 };

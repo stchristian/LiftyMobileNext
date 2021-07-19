@@ -13,11 +13,9 @@ const DemoMatches = ({
     params: {routeId},
   },
 }: any) => {
-  console.log(routeId);
   const route = useRouteById(routeId);
 
   const matches = useRouteMatches(routeId);
-  console.log(route, matches);
   const routeProps = useMemo(
     () => [
       {

@@ -10,14 +10,14 @@ import fontStyles from 'assets/styles/font';
 import screenStyles from 'assets/styles/screen';
 import spacingStyles from 'assets/styles/spacing';
 import {Colors} from 'assets/colors';
-import {useMyRoutes} from 'hooks/index';
 import HorizontalSelect, {Option} from 'shared/HorizontalSelect';
 import {EndWayPoint, StartWayPoint} from 'shared/figures/WayPoint';
 import {Button} from 'shared/Button';
 import Header from 'shared/Header';
 import {useTimePicker} from 'hooks/timepicker';
-import {shortDateFormat} from 'src/utils/locales';
-import {getTime} from 'src/utils/date';
+import {getTime, shortDateFormat} from 'src/utils/date';
+import {useMyRoutes} from 'hooks/route';
+import MapView from 'shared/MapView';
 
 export type AddRideParams = {
   timestamp: number;
@@ -44,8 +44,8 @@ const AddRide = ({
     () =>
       myRoutes.map(route => ({
         label: route.name,
-        value: route.id,
-        selected: route.id === selectedRouteId ? true : false,
+        value: route._id,
+        selected: route._id === selectedRouteId ? true : false,
       })),
     [myRoutes, selectedRouteId],
   );
@@ -73,7 +73,7 @@ const AddRide = ({
   const {showTimePicker} = useTimePicker(handleTimePicked);
 
   const selectedRoute = useMemo(
-    () => myRoutes.find(route => route.id === selectedRouteId),
+    () => myRoutes.find(route => route._id === selectedRouteId),
     [myRoutes, selectedRouteId],
   );
 
@@ -85,7 +85,7 @@ const AddRide = ({
     <>
       <Header title="Utazás hozzáadása" />
       <ScrollView contentContainerStyle={screenStyles.default}>
-        <Text style={{...fontStyles.normal, ...spacingStyles.bottom}}>
+        <Text style={{...fontStyles.small, ...spacingStyles.bottom}}>
           Kiválasztott dátum:
           <Text style={fontStyles.normal_bold}> {shortDateFormat(date)}</Text>
         </Text>
@@ -110,30 +110,45 @@ const AddRide = ({
           </TouchableWithoutFeedback>
         </View>
 
-        <Text style={{...fontStyles.normal, ...spacingStyles.bottom}}>
+        <Text style={{...fontStyles.small, ...spacingStyles.bottom}}>
           Melyik útvonalonadon utazol?
         </Text>
         <HorizontalSelect
-          containerStyle={spacingStyles.bottom}
+          containerStyle={{
+            ...spacingStyles.bottom,
+            marginHorizontal: -16,
+          }}
           options={routeOptions}
           onSelect={handleRouteSelected}
         />
-        {selectedRoute && (
+        <MapView
+          style={styles.map}
+          routes={
+            selectedRoute
+              ? [
+                  {
+                    route: selectedRoute,
+                    color: Colors.PRIMARY,
+                  },
+                ]
+              : []
+          }
+        />
+        {/* {selectedRoute && (
           <View style={spacingStyles.bottom}>
-            <StartWayPoint label={selectedRoute.from} />
-            <EndWayPoint label={selectedRoute.to} />
+            <StartWayPoint label={selectedRoute.originAddress} />
+            <EndWayPoint label={selectedRoute.destinationAddress} />
           </View>
-        )}
-        <Text style={{...fontStyles.normal, ...spacingStyles.bottom}}>
+        )} */}
+        <Text style={{...fontStyles.small, ...spacingStyles.bottom}}>
           Mikor indulsz?
           <Text style={fontStyles.normal_bold}>
             {' '}
             {timeSelected && getTime(date)}
           </Text>
         </Text>
-        <View>
+        <View style={{flexDirection: 'row'}}>
           <Button
-            size="normal"
             onPress={() => showTimePicker(date.getHours(), date.getMinutes())}
             text="Idő kiválasztása"
           />
@@ -175,6 +190,10 @@ const styles = StyleSheet.create({
     borderColor: Colors.BLACK_60,
     borderRadius: 16,
     marginRight: 8,
+  },
+  map: {
+    marginHorizontal: -16,
+    ...spacingStyles.bottom,
   },
 });
 export default AddRide;

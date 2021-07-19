@@ -30,7 +30,7 @@ export default function LocationFinder({
   const [keyword, setKeyword] = useState('');
   const inputRef = useRef(null);
   const [locationOptions, setLocationOptions] = useState<LocationOption[]>([]);
-  const debouncedKeyword = useDebounce(keyword, 1000);
+  const debouncedKeyword = useDebounce(keyword, 500);
 
   useEffect(() => {
     //@ts-ignore
@@ -41,7 +41,6 @@ export default function LocationFinder({
     let mounted = true;
     if (debouncedKeyword) {
       getPlaces(debouncedKeyword).then(candidates => {
-        console.log(candidates);
         mounted &&
           setLocationOptions(
             candidates.map(candidate => ({
@@ -87,58 +86,6 @@ export default function LocationFinder({
         keyExtractor={item => item.value.place_id}
       />
     </Screen>
-  );
-  const [input, setInput] = useState('');
-
-  const fetchPlaceSuggestions = useFetchPlaceSuggestions();
-  const [debouncedInput] = useDebounce(input, 600);
-  const currentLocation = useCurrentLocation();
-
-  useEffect(() => {
-    let effect = true;
-    if (debouncedInput.length !== 0) {
-      fetchPlaceSuggestions(debouncedInput, currentLocation).then(options => {
-        effect && setPlaceOptions(options);
-      });
-    }
-    return () => {
-      effect = false;
-    };
-  }, [debouncedInput, fetchPlaceSuggestions, currentLocation]);
-
-  const handleOptionSelected = useCallback(
-    (option: PlaceSuggestion) => {
-      navigation.navigate('SignupRoute', {[key]: option});
-    },
-    [navigation, key],
-  );
-
-  return (
-    <Container>
-      <Navbar
-        customContent={
-          <Input
-            style={styles.input}
-            placeholder="Find place..."
-            onChangeText={text => setInput(text)}
-          />
-        }
-      />
-
-      <Content>
-        {placeOptions.map(option => (
-          <ListItem
-            key={option.value}
-            onPress={() => {
-              handleOptionSelected(option);
-            }}>
-            <Body>
-              <Text>{option.label}</Text>
-            </Body>
-          </ListItem>
-        ))}
-      </Content>
-    </Container>
   );
 }
 

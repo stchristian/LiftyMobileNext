@@ -1,5 +1,3 @@
-import {DateObject} from 'react-native-calendars';
-
 export const hu = {
   date: {
     monthNames: [
@@ -43,11 +41,3 @@ export const hu = {
     today: 'Ma',
   },
 };
-
-export function shortDateFormat(date: Date) {
-  return `${hu.date.monthNames[date.getMonth()]} ${date.getDay()}.`;
-}
-
-export function time(date: Date) {
-  return `${date.getHours()}:${date.getMinutes()}`;
-}

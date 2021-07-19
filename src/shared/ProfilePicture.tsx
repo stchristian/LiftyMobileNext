@@ -22,8 +22,8 @@ const ProfilePicture = ({
 
 const styles = StyleSheet.create({
   big: {
-    width: 128,
-    height: 128,
+    width: 90,
+    height: 90,
   },
   normal: {
     width: 68,

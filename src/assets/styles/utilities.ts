@@ -8,4 +8,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  fluid: {
+    marginHorizontal: -16,
+  },
 });

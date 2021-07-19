@@ -3,7 +3,7 @@ import {StackActions, useNavigation} from '@react-navigation/core';
 import {useCallback, useEffect} from 'react';
 import {getMyRoutes} from 'src/api/callables';
 import {getUserInfo} from 'src/api/firestore';
-import {setMyRoutes, setUser} from 'src/store/actionCreators';
+import {resetStore, setMyRoutes, setUser} from 'src/store/actionCreators';
 import {useAppDispatch, useAppSelector} from './store';
 
 const authInstance = auth();
@@ -20,7 +20,6 @@ export const useAuthListener = () => {
         getUserInfo(user.uid),
         getMyRoutes(),
       ]);
-      console.log(routes);
 
       dispatch(
         setUser({
@@ -60,9 +59,11 @@ export const useLogin = () => {
 };
 
 export const useLogout = () => {
+  const dispatch = useAppDispatch();
   return useCallback(() => {
     authInstance.signOut();
-  }, []);
+    dispatch(resetStore());
+  }, [dispatch]);
 };
 
 export const useLoggedInUser = () => {

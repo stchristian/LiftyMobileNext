@@ -21,14 +21,16 @@ const HorizontalSelect = ({
   onSelect: (value: any) => any;
 }) => {
   return (
-    <View style={containerStyle}>
-      <ScrollView horizontal>
-        {options.map(option => (
+    <View style={[containerStyle]}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        {options.map((option, index) => (
           <TouchableWithoutFeedback
-            style={{
-              ...styles.option,
-              ...(option.selected ? styles.selected : {}),
-            }}
+            style={[
+              styles.option,
+              option.selected ? styles.selected : {},
+              index === 0 ? styles.first : {},
+              index === options.length - 1 ? styles.last : {},
+            ]}
             onPress={() => onSelect(option.value)}
             key={option.value}>
             <Text style={fontStyles.small}>{option.label}</Text>
@@ -47,6 +49,12 @@ const styles = StyleSheet.create({
     borderColor: Colors.BLACK_60,
     borderRadius: 16,
     marginRight: 8,
+  },
+  first: {
+    marginLeft: 16,
+  },
+  last: {
+    marginRight: 16,
   },
   selected: {
     borderColor: Colors.PRIMARY,
