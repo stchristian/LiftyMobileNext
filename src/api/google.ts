@@ -1,9 +1,10 @@
 import axios from 'axios';
+import config from '../config';
 
 const googleApi = axios.create({
-  baseURL: 'https://maps.googleapis.com/maps/api',
+  baseURL: config.GOOGLE_API_BASE_URL,
   params: {
-    key: 'AIzaSyDSdcWiZMi8BnJaVUyC-3MaBagmiDFx2rI',
+    key: config.GOOGLE_API_KEY,
   },
 });
 

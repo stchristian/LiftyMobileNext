@@ -11,9 +11,10 @@ import {
   DeleteRouteRequest,
   DeleteRouteResponse,
 } from 'lifty-types';
+import config from '../config';
 
 if (__DEV__) {
-  firebase.functions().useFunctionsEmulator('http://192.168.0.7:5001');
+  firebase.functions().useFunctionsEmulator(config.DEV_FUNCTIONS_EMULATOR_URL);
 }
 
 const module: FirebaseFunctionsTypes.Module = firebase.functions();
