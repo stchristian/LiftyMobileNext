@@ -1,5 +1,4 @@
 import auth from '@react-native-firebase/auth';
-import {StackActions, useNavigation} from '@react-navigation/core';
 import {useCallback, useEffect} from 'react';
 import {getMyRoutes} from 'src/api/callables';
 import {getUserInfo} from 'src/api/firestore';
@@ -36,20 +35,6 @@ export const useAuthListener = () => {
     const subscriber = authInstance.onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
   }, [onAuthStateChanged]);
-};
-
-export const useAuthRedirect = () => {
-  const userSetAt = useAppSelector(state => state.userSetAt);
-  const user = useAppSelector(state => state.user);
-  const navigation = useNavigation();
-
-  return useCallback(() => {
-    if (userSetAt && user) {
-      navigation.dispatch(StackActions.replace('Tab'));
-    } else if (userSetAt && user === null) {
-      navigation.dispatch(StackActions.replace('HomeStack'));
-    }
-  }, [userSetAt, user, navigation]);
 };
 
 export const useLogin = () => {

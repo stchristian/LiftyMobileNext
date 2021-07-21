@@ -49,15 +49,4 @@ Host apk
 
 ## TODO 
 
-Extend Button
-- OUTLINE type
-- SMALL size
-
-Finish AddRide
-
-- add icons from figma
-
-Uniform Color system
-
-- marker can be replaced with image
-- waypoints
+* Replace styles/screen with `<Screen />`

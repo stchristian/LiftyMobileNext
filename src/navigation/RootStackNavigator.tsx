@@ -8,10 +8,10 @@ import LocationFinder, {
   LocationFinderParams as LocationFinderParams,
 } from '../screens/LocationFinder';
 import {NavigatorScreenParams} from '@react-navigation/core';
-import TabNavigator, {TabParamList} from './TabNavigator';
+import {TabParamList} from './TabNavigator';
 import SplashScreen from '../screens/Splash';
-import {useAuthListener} from 'hooks/auth';
 import {useAppSelector} from 'hooks/store';
+
 export type RootStackParamList = {
   Splash: {};
   HomeStack: NavigatorScreenParams<HomeStackParamList>;

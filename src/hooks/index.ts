@@ -1,25 +1,5 @@
 import {useEffect, useState} from 'react';
-import {getDirections} from 'src/api/google';
 import {Ride, RideMatch} from 'src/types/Ride';
-import {LatLng} from 'react-native-maps';
-import {decode, LatLngTuple} from '@googlemaps/polyline-codec';
-
-export const useMyRoutes = () => {
-  return [
-    {
-      id: 123,
-      name: 'Otthonról melóba',
-      from: 'X. Bp Szent László tér',
-      to: 'V. Karinthy Frigyes utca 2.',
-    },
-    {
-      id: 124,
-      name: 'Melóból haza',
-      to: 'X. Bp Szent László tér',
-      from: 'V. Karinthy Frigyes utca 2.',
-    },
-  ];
-};
 
 export const useRide = (rideId: string) => {
   return {
