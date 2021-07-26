@@ -34,7 +34,7 @@ export default React.memo(() => {
   const signedIn = useAppSelector(state => !!state.user);
   return (
     <HomeStackNavigator.Navigator>
-      {signedIn ? (
+      {false ? (
         <>
           <HomeStackNavigator.Screen
             name="Tab"
