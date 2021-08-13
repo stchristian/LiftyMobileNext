@@ -1,21 +1,18 @@
 import font from 'assets/styles/font';
 import spacing from 'assets/styles/spacing';
-import {useGoogleSignin, useLogin} from 'hooks/auth';
-import React, {useState, useEffect} from 'react';
+import {useGoogleSignin} from 'hooks/auth';
+import React, {useEffect} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import {Button} from 'shared/Button';
 import Screen from 'shared/Screen';
-import {TextInput} from 'shared/TextInput';
 import {
   GoogleSigninButton,
   GoogleSignin,
 } from '@react-native-google-signin/google-signin';
 const Login = () => {
-  const [email, setEmail] = useState('hubner.krisztian97@gmail.com');
-  const [password, setPassword] = useState('liftyapp');
-
-  const [userInfo, inProgress, signIn] = useGoogleSignin();
-  const login = useLogin();
+  // const [email, setEmail] = useState('hubner.krisztian97@gmail.com');
+  // const [password, setPassword] = useState('liftyapp');
+  // const login = useLogin();
+  const {inProgress, signIn} = useGoogleSignin();
 
   useEffect(() => {
     return () => {
@@ -25,9 +22,7 @@ const Login = () => {
   return (
     <Screen>
       <View style={styles.container}>
-        <Text style={[font.title_xl, font.center, spacing.bottom]}>
-          Bejelentkezés
-        </Text>
+        {/*
         <TextInput
           label="Email *"
           value={email}
@@ -38,20 +33,23 @@ const Login = () => {
           value={password}
           type="password"
           onChangeText={text => setPassword(text)}
+        /> */}
+        <Text style={[font.title_xl, font.center, spacing.bottom]}>
+          Bejelentkezés
+        </Text>
+        <GoogleSigninButton
+          style={styles.googleButton}
+          size={GoogleSigninButton.Size.Wide}
+          color={GoogleSigninButton.Color.Dark}
+          onPress={signIn}
+          disabled={inProgress}
         />
       </View>
-      <Button
+      {/* <Button
         text="bejelentkezés"
         size="big"
         onPress={() => login(email, password)}
-      />
-      <GoogleSigninButton
-        style={{width: 192, height: 48}}
-        size={GoogleSigninButton.Size.Wide}
-        color={GoogleSigninButton.Color.Dark}
-        onPress={signIn}
-        disabled={inProgress}
-      />
+      /> */}
     </Screen>
   );
 };
@@ -59,7 +57,9 @@ const Login = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'center',
   },
+  googleButton: {width: '80%', height: 48, alignSelf: 'center'},
 });
 
 export default Login;

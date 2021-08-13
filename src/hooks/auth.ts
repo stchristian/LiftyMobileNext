@@ -1,7 +1,7 @@
 import auth from '@react-native-firebase/auth';
 import {useCallback, useEffect, useState} from 'react';
 import {getMyRoutes} from 'src/api/callables';
-import {getUserInfo} from 'src/api/firestore';
+import {addUserInfo, getUserInfo} from 'src/api/firestore';
 import {resetStore, setMyRoutes, setUser} from 'src/store/actionCreators';
 import {useAppDispatch, useAppSelector} from './store';
 import {
@@ -13,7 +13,6 @@ GoogleSignin.configure({
   scopes: [
     'https://www.googleapis.com/auth/userinfo.profile',
     'https://www.googleapis.com/auth/userinfo.email',
-    'https://www.googleapis.com/auth/user.addresses.read',
   ], // what API you want to access on behalf of the user, default is email and profile
   webClientId:
     '170915345517-9g5dpj8r44je0nh8f5renkcn0d14r54e.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
@@ -22,6 +21,9 @@ GoogleSignin.configure({
 
 const authInstance = auth();
 
+/**
+ * This hooks should be called in a root component once. It listens to changes in firebase authentication state, and according to the change it updates user data in the store
+ */
 export const useAuthListener = () => {
   const dispatch = useAppDispatch();
   const onAuthStateChanged = useCallback(
@@ -66,18 +68,41 @@ export const useLogout = () => {
   }, [dispatch]);
 };
 
+/**
+ * Google auth works as follows:
+ * 1) Initiate google signin (user has to choose which account he/she would like to sign in with)
+ * 2) From 1) we got back an ID token. With this a credential is retrieved from firebase.
+ * 3) We use this credential to sign in the user to firebase.
+ */
 export const useGoogleSignin = () => {
   const [inProgress, setInProgress] = useState(false);
-  const [userInfo, setUserInfo] = useState<any>(null);
   const signIn = useCallback(async () => {
     try {
       setInProgress(true);
       await GoogleSignin.hasPlayServices();
       const result = await GoogleSignin.signIn();
-      setUserInfo(result);
-      console.log('GOOGLE SIGNIN', result);
+      const googleCredential = await auth.GoogleAuthProvider.credential(
+        result.idToken,
+      );
+      const {additionalUserInfo, user} = await auth().signInWithCredential(
+        googleCredential,
+      );
+      if (additionalUserInfo?.isNewUser) {
+        await addUserInfo(user.uid, {
+          ...(additionalUserInfo.profile
+            ? {
+                lastName: additionalUserInfo.profile.family_name,
+                firstName: additionalUserInfo.profile.given_name,
+              }
+            : {
+                lastName: 'NO_DATA',
+                firstName: 'NO_DATA',
+              }),
+        });
+      }
     } catch (error) {
-      console.error(JSON.stringify(error));
+      console.log(JSON.stringify(error, null, 2));
+      //TODO: handle different error codes?!
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
       } else if (error.code === statusCodes.IN_PROGRESS) {
@@ -92,7 +117,7 @@ export const useGoogleSignin = () => {
     }
   }, []);
 
-  return [userInfo, inProgress, signIn];
+  return {inProgress, signIn};
 };
 
 export const useLoggedInUser = () => {
