@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "170915345517-g39iamc2co3qdtcjtjuc1eubviuqddl9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.liftymobilenext",
+            "certificate_hash": "1c24269fa0bbb04ab18b8e040a4bbbf9d7b32165"
+          }
+        },
+        {
           "client_id": "170915345517-9g5dpj8r44je0nh8f5renkcn0d14r54e.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -44,8 +44,11 @@ via [@react-native-firebase/auth](https://rnfirebase.io/auth/usage)
 
 cd android
 ./gradlew assembleRelease
-
+You can find apk in `app/build/outputs/apk/release`
 Host apk
+
+Release key infos:
+android/gradle.properties
 
 ## TODO 
 

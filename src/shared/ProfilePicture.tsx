@@ -8,13 +8,15 @@ const ProfilePicture = ({
   size = 'normal',
   style,
 }: {
-  src?: string;
+  src: string;
   size?: string;
   style?: ImageStyle;
 }) => {
   return (
     <Image
-      source={profile_picture}
+      source={{
+        uri: src,
+      }}
       style={[styles.image, styles[size], style]}
     />
   );
