@@ -1,4 +1,4 @@
-import auth from '@react-native-firebase/auth';
+import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {useCallback, useEffect, useState} from 'react';
 import {getMyRoutes} from 'src/api/callables';
 import {addUserInfo, getUserInfo} from 'src/api/firestore';
@@ -8,6 +8,7 @@ import {
   GoogleSignin,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
+import {User} from 'src/types/User';
 
 GoogleSignin.configure({
   scopes: [
@@ -26,27 +27,39 @@ const authInstance = auth();
  */
 export const useAuthListener = () => {
   const dispatch = useAppDispatch();
-  const onAuthStateChanged = useCallback(
-    async user => {
-      console.log('AUTH STATE CHANGED', !!user);
-      if (user === null) {
-        return dispatch(setUser(null));
-      }
-      const [info, routes] = await Promise.all([
-        getUserInfo(user.uid),
-        getMyRoutes(),
-      ]);
+  const onAuthStateChanged: FirebaseAuthTypes.AuthListenerCallback =
+    useCallback(
+      async firebaseUser => {
+        console.log('AUTH STATE CHANGED', !!firebaseUser);
+        if (firebaseUser === null) {
+          return dispatch(setUser(null));
+        }
+        //TODO: remove setTimout
+        //When you first log in with google, firebase auth listener fires but the saving of additional data might not have been finished.
+        // We wait a little here in order to save the addition user data to firebase
+        setTimeout(async () => {
+          const [info, routes] = await Promise.all([
+            getUserInfo(firebaseUser.uid),
+            getMyRoutes(),
+          ]);
 
-      dispatch(
-        setUser({
-          ...user,
-          ...info,
-        }),
-      );
-      dispatch(setMyRoutes(routes));
-    },
-    [dispatch],
-  );
+          const user = {
+            uid: firebaseUser.uid,
+            email: firebaseUser.email,
+            photoURL: firebaseUser.photoURL,
+            displayName: firebaseUser.displayName,
+          } as User;
+          dispatch(
+            setUser({
+              ...user,
+              ...info,
+            }),
+          );
+          dispatch(setMyRoutes(routes));
+        }, 1000);
+      },
+      [dispatch],
+    );
 
   useEffect(() => {
     const subscriber = authInstance.onAuthStateChanged(onAuthStateChanged);
@@ -101,7 +114,7 @@ export const useGoogleSignin = () => {
         });
       }
     } catch (error) {
-      console.log(JSON.stringify(error, null, 2));
+      console.log(error);
       //TODO: handle different error codes?!
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow

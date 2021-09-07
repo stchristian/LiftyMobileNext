@@ -1,6 +1,10 @@
-import {FirebaseAuthTypes} from '@react-native-firebase/auth';
+export type User = {
+  uid: string;
+  email: string;
+  photoURL: string;
+  displayName: string;
+} & AdditionalUserInfo;
 
-export type User = FirebaseAuthTypes.User & AdditionalUserInfo;
 export type AdditionalUserInfo = {
   firstName: string;
   lastName: string;
