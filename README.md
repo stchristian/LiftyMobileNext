@@ -7,7 +7,7 @@ Currently only Android is supported.
 Android versions
 - Android SDK Platform 29 with Intel x86 Atom_64 System Image
 - Android SDK Build tools 29.0.2
-- .bashrc
+- On Linux update .bashrc on Mac .zshrc (possibly)
 ```
 export ANDROID_HOME=$HOME/Android/Sdk
 export PATH=$PATH:$ANDROID_HOME/emulator
@@ -21,6 +21,12 @@ Watchman v2021.05.10.00
 React native 5.0.1-alpha.2
 
 Node 12.22.1
+
+* create `local.properties` file with the path of android sdk in android folder
+Example 
+```
+sdk.dir=[absolute_path_to_sdk]
+```
 
 ## Firebase settings
 
