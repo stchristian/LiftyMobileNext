@@ -70,11 +70,14 @@ const Profile = ({navigation}: any) => {
       routeId,
     });
   };
-
   return (
     <Screen scrollable>
       <View style={[styles.row, spacing.bottom]}>
-        <ProfilePicture size="big" style={spacing.right} />
+        <ProfilePicture
+          size="big"
+          style={spacing.right}
+          src={user!.photoURL || undefined}
+        />
         <Text
           style={
             fontStyles.title_s

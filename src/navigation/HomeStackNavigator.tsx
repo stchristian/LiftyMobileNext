@@ -30,7 +30,6 @@ export type HomeStackNavigationProp = StackNavigationProp<HomeStackParamList>;
 const HomeStackNavigator = createStackNavigator<HomeStackParamList>();
 
 export default React.memo(() => {
-  useAuthListener();
   const signedIn = useAppSelector(state => !!state.user);
   return (
     <HomeStackNavigator.Navigator>
