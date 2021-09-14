@@ -1,5 +1,5 @@
-import {Colors} from 'assets/colors';
-import {StyleSheet} from 'react-native';
+import { Colors } from 'assets/colors';
+import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   title_xxl: {

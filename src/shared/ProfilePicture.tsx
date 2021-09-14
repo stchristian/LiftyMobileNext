@@ -1,17 +1,19 @@
 import React from 'react';
-import {Image, ImageStyle, StyleSheet} from 'react-native';
-import profile_picture from 'assets/images/profile_picture.jpg';
-import {Colors} from 'assets/colors';
+import { Image, ImageStyle, StyleSheet } from 'react-native';
+import { Colors } from 'assets/colors';
+import NoProfilePicture from './figures/NoProfilePicture';
 
 const ProfilePicture = ({
   src,
   size = 'normal',
   style,
 }: {
-  src: string;
+  src?: string;
   size?: string;
   style?: ImageStyle;
 }) => {
+  if (typeof src === 'undefined') return <NoProfilePicture />;
+
   return (
     <Image
       source={{

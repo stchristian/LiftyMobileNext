@@ -1,19 +1,13 @@
 import firestore from '@react-native-firebase/firestore';
-import {AdditionalUserInfo} from 'src/types/User';
+import { User } from 'lifty-types';
 
 const instance = firestore();
 
-export async function getUserInfo(uid: string) {
+export async function getUser(uid: string) {
   const user = await instance.collection('users').doc(uid).get();
-  return user.data() as AdditionalUserInfo;
+  return user.data() as User;
 }
 
-export function addUserInfo(
-  uid: string,
-  data: {
-    firstName: string;
-    lastName: string;
-  },
-) {
-  return instance.collection('users').doc(uid).set(data);
+export function addUser(user: User) {
+  return instance.collection('users').doc(user.uid).set(user);
 }

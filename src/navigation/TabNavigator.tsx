@@ -1,12 +1,13 @@
 import * as React from 'react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Community from 'screens/Community';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Search from 'screens/Search';
 import MyRides from 'screens/MyRides';
 import Profile from 'screens/Profile';
 import BottomTabBar from 'shared/BottomTabBar';
-import {useLoggedInUser} from 'hooks/auth';
+import { useLoggedInUser } from 'hooks/auth';
+
 export type TabParamList = {
-  Community: {};
+  Search: {};
   MyRides: {};
   Profile: {};
 };
@@ -23,22 +24,22 @@ export default function TabNavigator() {
       initialRouteName="Profile"
       tabBar={props => <BottomTabBar {...props} />}>
       <Tab.Screen
-        name="Community"
-        component={Community}
+        name="Search"
+        component={Search}
         //@ts-ignore
-        options={{title: 'közösségek', icon: 'user-friends'}}
+        options={{ title: 'keresés', icon: 'user-friends' }}
       />
       <Tab.Screen
         name="MyRides"
         component={MyRides}
         //@ts-ignore
-        options={{title: 'utazásaim', icon: 'calendar'}}
+        options={{ title: 'utazásaim', icon: 'calendar' }}
       />
       <Tab.Screen
         name="Profile"
         component={Profile}
         //@ts-ignore
-        options={{title: 'profil', icon: 'user'}}
+        options={{ title: 'profil', icon: 'user' }}
       />
     </Tab.Navigator>
   );

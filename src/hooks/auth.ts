@@ -1,14 +1,13 @@
-import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import {useCallback, useEffect, useState} from 'react';
-import {getMyRoutes} from 'src/api/callables';
-import {addUserInfo, getUserInfo} from 'src/api/firestore';
-import {resetStore, setMyRoutes, setUser} from 'src/store/actionCreators';
-import {useAppDispatch, useAppSelector} from './store';
+import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import { useCallback, useEffect, useState } from 'react';
+import { getMyRoutes } from 'src/api/callables';
+import { addUser, getUser } from 'src/api/firestore';
+import { resetStore, setMyRoutes, setUser } from 'src/store/actionCreators';
+import { useAppDispatch, useAppSelector } from './store';
 import {
   GoogleSignin,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
-import {User} from 'src/types/User';
 
 GoogleSignin.configure({
   scopes: [
@@ -38,23 +37,11 @@ export const useAuthListener = () => {
         //When you first log in with google, firebase auth listener fires but the saving of additional data might not have been finished.
         // We wait a little here in order to save the addition user data to firebase
         setTimeout(async () => {
-          const [info, routes] = await Promise.all([
-            getUserInfo(firebaseUser.uid),
+          const [user, routes] = await Promise.all([
+            getUser(firebaseUser.uid),
             getMyRoutes(),
           ]);
-
-          const user = {
-            uid: firebaseUser.uid,
-            email: firebaseUser.email,
-            photoURL: firebaseUser.photoURL,
-            displayName: firebaseUser.displayName,
-          } as User;
-          dispatch(
-            setUser({
-              ...user,
-              ...info,
-            }),
-          );
+          dispatch(setUser(user));
           dispatch(setMyRoutes(routes));
         }, 1000);
       },
@@ -97,20 +84,16 @@ export const useGoogleSignin = () => {
       const googleCredential = await auth.GoogleAuthProvider.credential(
         result.idToken,
       );
-      const {additionalUserInfo, user} = await auth().signInWithCredential(
+      const { additionalUserInfo, user } = await auth().signInWithCredential(
         googleCredential,
       );
       if (additionalUserInfo?.isNewUser) {
-        await addUserInfo(user.uid, {
-          ...(additionalUserInfo.profile
-            ? {
-                lastName: additionalUserInfo.profile.family_name,
-                firstName: additionalUserInfo.profile.given_name,
-              }
-            : {
-                lastName: 'NO_DATA',
-                firstName: 'NO_DATA',
-              }),
+        await addUser({
+          uid: user.uid,
+          phoneNumber: null,
+          photoURL: user.photoURL,
+          lastName: additionalUserInfo.profile!.family_name,
+          firstName: additionalUserInfo.profile!.given_name,
         });
       }
     } catch (error) {
@@ -130,7 +113,7 @@ export const useGoogleSignin = () => {
     }
   }, []);
 
-  return {inProgress, signIn};
+  return { inProgress, signIn };
 };
 
 export const useLoggedInUser = () => {
