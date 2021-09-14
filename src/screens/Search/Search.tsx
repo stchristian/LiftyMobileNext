@@ -37,8 +37,8 @@ const Community = () => {
     return (
       <MatchCard
         style={styles.cardStyle}
-        // photoURL={item.user.photoURL}
-        firstName={item.user.displayName.split(' ')[0]}
+        photoURL={item.user.photoURL !== null ? item.user.photoURL : undefined}
+        firstName={item.user.firstName}
       />
     );
   }, []);
