@@ -1,32 +1,46 @@
-import {Colors} from 'assets/colors';
+import { Colors } from 'assets/colors';
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import BackIcon from 'assets/icons/back.svg';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import fontStyles from 'assets/styles/font';
 
-const Header = ({children, title, withBackButton = true}: any) => {
+const Header = ({
+  children,
+  title,
+  titlePosition = 'center',
+  rightButton,
+  withBackButton = true,
+  handleRightButtonPress = () => {},
+}: any) => {
   const navigation = useNavigation();
 
   const handleBackPress = () => {
     navigation.goBack();
   };
+
+  const isCentered = titlePosition === 'center';
+  const isLeft = titlePosition === 'left';
+
   return (
-    <View style={styles.header}>
+    <View
+      style={[
+        styles.header,
+        isCentered && styles.alignedCenter,
+        isLeft && styles.alignedLeft,
+      ]}>
       {withBackButton && (
-        <TouchableOpacity onPress={handleBackPress}>
+        <TouchableOpacity style={[styles.backButton]} onPress={handleBackPress}>
           <BackIcon />
         </TouchableOpacity>
       )}
-      <Text
-        style={[
-          styles.title,
-          withBackButton ? styles.titleWithBackButton : undefined,
-        ]}>
-        {title}
-      </Text>
+      <Text style={[styles.title]}>{title}</Text>
       {children}
+      <TouchableOpacity
+        style={[styles.rightButton]}
+        onPress={handleRightButtonPress}>
+        {rightButton}
+      </TouchableOpacity>
     </View>
   );
 };
@@ -36,16 +50,28 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     height: 56,
+    textAlign: 'center',
     backgroundColor: Colors.HEADER_BG,
     paddingHorizontal: 16,
     // borderWidth: 1,
     borderColor: 'red',
   },
+  alignedLeft: {
+    justifyContent: 'flex-start',
+  },
+  alignedCenter: {
+    justifyContent: 'center',
+  },
   title: {
     ...fontStyles.title_m,
   },
-  titleWithBackButton: {
-    marginLeft: 16,
+  backButton: {
+    position: 'absolute',
+    left: 16,
+  },
+  rightButton: {
+    position: 'absolute',
+    right: 16,
   },
 });
 

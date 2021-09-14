@@ -1,6 +1,6 @@
 import React from 'react';
-import {View, Text, StyleSheet, Pressable, ViewStyle} from 'react-native';
-import {Colors} from 'src/assets/colors';
+import { View, Text, StyleSheet, Pressable, ViewStyle } from 'react-native';
+import { Colors } from 'src/assets/colors';
 import fontStyles from 'src/assets/styles/font';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -32,7 +32,9 @@ export const Button = ({
           leftIcon ? styles.leftIconPad : {},
           styles[type],
           styles[size],
+          disabled && styles.disabled,
         ]}
+        disabled={disabled}
         android_ripple={{
           color:
             type === 'primary' ? Colors.PRIMARY_LIGHT : Colors.SECONDARY_LIGHT,
@@ -44,6 +46,7 @@ export const Button = ({
           style={[
             size === 'normal' ? fontStyles.small_bold : fontStyles.normal_bold,
             textStyles[type],
+            styles.label,
           ]}>
           {text}
         </Text>
@@ -68,6 +71,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
   },
+  label: { padding: 5 },
   borderRadius: {
     borderRadius: 100,
     overflow: 'hidden',
@@ -85,6 +89,9 @@ const styles = StyleSheet.create({
   },
   primary: {
     backgroundColor: Colors.PRIMARY,
+  },
+  disabled: {
+    backgroundColor: Colors.PRIMARY_LIGHT,
   },
   secondary: {
     backgroundColor: Colors.SECONDARY,

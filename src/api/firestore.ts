@@ -1,5 +1,5 @@
 import firestore from '@react-native-firebase/firestore';
-import {AdditionalUserInfo} from 'src/types/User';
+import { AdditionalUserInfo } from 'src/types/User';
 
 const instance = firestore();
 
@@ -16,4 +16,10 @@ export function addUserInfo(
   },
 ) {
   return instance.collection('users').doc(uid).set(data);
+}
+
+export async function updateUserInfo(uid: string, data: {}) {
+  await instance.collection('users').doc(uid).set(data, { merge: true });
+  const user = await instance.collection('users').doc(uid).get();
+  return user.data() as AdditionalUserInfo;
 }

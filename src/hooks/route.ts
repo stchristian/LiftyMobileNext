@@ -1,15 +1,15 @@
-import {useCallback, useMemo, useState, useEffect} from 'react';
-import {addRoute, deleteRoute, updateRoute} from 'src/store/actionCreators';
+import { useCallback, useMemo, useState, useEffect } from 'react';
+import { addRoute, deleteRoute, updateRoute } from 'src/store/actionCreators';
 import {
   addRoute as addRouteCallable,
   getMatches,
   deleteRoute as deleteRouteCallable,
 } from 'src/api/callables';
-import {useAppSelector, useAppDispatch} from './store';
-import {getDirections} from 'src/api/google';
-import {LatLng} from 'react-native-maps';
-import {AddRouteRequest, Route} from 'lifty-types';
-import {transformPolylineToCoordinatesFormat} from 'src/utils/route';
+import { useAppSelector, useAppDispatch } from './store';
+import { getDirections } from 'src/api/google';
+import { LatLng } from 'react-native-maps';
+import { AddRouteRequest, Route } from 'lifty-types';
+import { transformPolylineToCoordinatesFormat } from 'src/utils/route';
 
 export const useAddRouteRequest = () => {
   const dispatch = useAppDispatch();
