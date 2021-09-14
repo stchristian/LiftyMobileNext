@@ -1,22 +1,22 @@
 import React from 'react';
-import {View, Text, ScrollView, StyleSheet, ViewStyle} from 'react-native';
-import spacingStyles from 'src/assets/styles/spacing';
-import {Colors} from 'src/assets/colors';
+import { View, Text, ScrollView, StyleSheet, ViewStyle } from 'react-native';
+import { Colors } from 'src/assets/colors';
 import fontStyles from 'src/assets/styles/font';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 export type Option = {
   label: string;
   value: any;
-  selected: boolean;
 };
 
 const HorizontalSelect = ({
   options,
   onSelect,
+  value,
   containerStyle,
 }: {
   containerStyle?: ViewStyle;
+  value?: any;
   options: Option[];
   onSelect: (value: any) => any;
 }) => {
@@ -27,7 +27,7 @@ const HorizontalSelect = ({
           <TouchableWithoutFeedback
             style={[
               styles.option,
-              option.selected ? styles.selected : {},
+              option.value === value ? styles.selected : {},
               index === 0 ? styles.first : {},
               index === options.length - 1 ? styles.last : {},
             ]}

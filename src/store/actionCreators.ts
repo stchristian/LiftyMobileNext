@@ -1,11 +1,10 @@
-import {Route} from 'lifty-types';
-import {User} from 'src/types/User';
+import { Route, User } from 'lifty-types';
 import * as ActionTypes from './actions';
 
 const createAction = <T extends keyof typeof ActionTypes, P>(
   type: T,
   payload?: P,
-) => ({type, payload: payload!});
+) => ({ type, payload: payload! });
 
 export function addRoute(route: Route) {
   return createAction(ActionTypes.ADD_ROUTE, route);

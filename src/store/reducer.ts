@@ -1,6 +1,5 @@
 import * as ActionTypes from './actions';
-import {User} from 'src/types/User';
-import {Route} from 'lifty-types';
+import { Route, User } from 'lifty-types';
 import * as actionsCreators from './actionCreators';
 
 const initialState = {

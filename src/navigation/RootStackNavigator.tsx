@@ -3,15 +3,15 @@ import {
   createStackNavigator,
   StackNavigationProp,
 } from '@react-navigation/stack';
-import StackNavigator, {HomeStackParamList} from './HomeStackNavigator';
+import StackNavigator, { HomeStackParamList } from './HomeStackNavigator';
 import LocationFinder, {
   LocationFinderParams as LocationFinderParams,
 } from '../screens/LocationFinder';
-import {NavigatorScreenParams} from '@react-navigation/core';
-import {TabParamList} from './TabNavigator';
+import { NavigatorScreenParams } from '@react-navigation/core';
+import { TabParamList } from './TabNavigator';
 import SplashScreen from '../screens/Splash';
-import {useAppSelector} from 'hooks/store';
-import {useAuthListener} from "hooks/auth";
+import { useAppSelector } from 'hooks/store';
+import { useAuthListener } from 'hooks/auth';
 
 export type RootStackParamList = {
   Splash: {};
@@ -26,7 +26,7 @@ const RootStack = createStackNavigator<RootStackParamList>();
 
 export default React.memo(() => {
   const rootState = useAppSelector(state => state);
-  console.log('APP ROOT STATE', JSON.stringify(rootState, null, 2));
+  console.log('APP ROOT STATE', JSON.stringify(rootState.user, null, 2));
   useAuthListener();
 
   return (
@@ -34,17 +34,17 @@ export default React.memo(() => {
       <RootStack.Screen
         name="Splash"
         component={SplashScreen}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <RootStack.Screen
         name="HomeStack"
         component={StackNavigator}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <RootStack.Screen
         name="LocationFinder"
         component={LocationFinder}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
     </RootStack.Navigator>
   );
