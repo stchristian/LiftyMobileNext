@@ -1,82 +1,58 @@
-import React, {useCallback, useMemo} from 'react';
-import {Button} from '../shared/Button';
+import React, { useCallback } from 'react';
+import { Button } from '../shared/Button';
 import Screen from 'shared/Screen';
-import {useCurrentUser} from 'hooks/index';
 import ProfilePicture from 'shared/ProfilePicture';
-import {View, StyleSheet, Text, Pressable} from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import fontStyles from 'assets/styles/font';
 import spacing from 'assets/styles/spacing';
 import font from 'assets/styles/font';
 import utilities from 'assets/styles/utilities';
-import {Colors} from 'assets/colors';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import {useNavigation} from '@react-navigation/core';
-import {useMyRoutes} from 'hooks/route';
+import { Colors } from 'assets/colors';
+import { useMyRoutes } from 'hooks/route';
 import RouteCard from 'shared/RouteCard';
-import {useLoggedInUser, useLogout} from 'hooks/auth';
+import { useLoggedInUser } from 'hooks/auth';
+import Header from 'shared/Header';
+import Wheel from 'shared/figures/Wheel';
+import { User } from 'lifty-types';
 
-const MenuItem = ({label, icon, routeParams, onPress}: any) => {
-  const navigation = useNavigation();
-
-  const handlePress = useCallback(() => {
-    routeParams && navigation.navigate(...routeParams);
-    onPress && onPress();
-  }, [navigation, routeParams, onPress]);
-
-  return (
-    <Pressable
-      style={styles.menuItem}
-      android_ripple={{
-        color: Colors.SECONDARY_LIGHT,
-      }}
-      onPress={handlePress}>
-      <Icon name={icon} size={32} color={Colors.ON_SECONDARY} />
-      <Text style={[styles.menuItemText, font.secondary]}>{label}</Text>
-    </Pressable>
-  );
-};
-
-const Profile = ({navigation}: any) => {
-  const user = useLoggedInUser();
+const Profile = ({ navigation }: any) => {
+  const user = useLoggedInUser() as User;
   const routes = useMyRoutes();
-  const logout = useLogout();
 
-  const menuItems = useMemo(
-    () => [
-      {
-        label: 'Adatok',
-        icon: 'account-circle',
-        routeParams: ['HomeStack', {screen: 'PersonalDetails'}],
-      },
-      {
-        label: 'Utazások',
-        icon: 'event',
-      },
-      {
-        label: 'Kijelentkezés',
-        icon: 'logout',
-        onPress: logout,
-      },
-    ],
-    [logout],
+  const handleRequestNewRoute = useCallback(() => {
+    navigation.push('AddRoute');
+  }, [navigation]);
+
+  const handleEditRouteRequest = useCallback(
+    (routeId: string) => {
+      navigation.push('AddRoute', {
+        routeId,
+      });
+    },
+    [navigation],
   );
 
-  const handleRequestNewRoute = () => {
-    navigation.push('AddRoute');
-  };
+  const goToProfileSettings = useCallback(() => {
+    navigation.navigate(...['HomeStack', { screen: 'PersonalDetails' }]);
+  }, [navigation]);
 
-  const handleEditRouteRequest = (routeId: string) => {
-    navigation.push('AddRoute', {
-      routeId,
-    });
-  };
   return (
-    <Screen scrollable>
+    <Screen
+      header={
+        <Header
+          title="Profil"
+          titlePosition={'left'}
+          withBackButton={false}
+          rightButton={<Wheel />}
+          handleRightButtonPress={goToProfileSettings}
+        />
+      }
+      scrollable>
       <View style={[styles.row, spacing.bottom]}>
         <ProfilePicture
           size="big"
           style={spacing.right}
-          src={user!.photoURL || undefined}
+          src={user.photoURL || undefined}
         />
         <Text
           style={
@@ -113,12 +89,6 @@ const Profile = ({navigation}: any) => {
           Nincs megjeleníthető útvonal
         </Text>
       )}
-      <Text style={[font.small, font.muted, spacing.bottom_s]}>Profil</Text>
-      <View style={[styles.menu, spacing.bottom]}>
-        {menuItems.map(item => (
-          <MenuItem {...item} key={item.label} />
-        ))}
-      </View>
     </Screen>
   );
 };

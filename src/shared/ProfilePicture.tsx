@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     borderRadius: 300,
     borderWidth: 5,
-    borderColor: Colors.PRIMARY_LIGHT,
+    borderColor: Colors.PRIMARY,
   },
 });
 

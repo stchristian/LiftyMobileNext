@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,7 +7,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {Colors} from '../assets/colors';
+import { Colors } from '../assets/colors';
 import fontStyles from '../assets/styles/font';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -15,6 +15,7 @@ export const TextInput = React.forwardRef<
   RNTextInput,
   {
     rightIcon?: string;
+    leftIcon?: ReactNode;
     value?: string;
     label?: string;
     placeholder?: string;
@@ -24,6 +25,8 @@ export const TextInput = React.forwardRef<
     style?: ViewStyle;
     onFocus?: () => any;
     type?: 'password';
+    editable?: boolean;
+    errorMessage?: string;
   }
 >(
   (
@@ -38,17 +41,31 @@ export const TextInput = React.forwardRef<
       rightIcon,
       onRightIconPress,
       type,
+      editable = true,
+      leftIcon,
+      errorMessage,
     },
     ref,
   ) => {
     return (
       <View>
         {label && <Text style={styles.label}>{label}</Text>}
-        <View style={[styles.inputContainer, style]}>
+        <View
+          style={[
+            styles.inputContainer,
+            style,
+            !editable && styles.disabled,
+            !!leftIcon && styles.hasLeftIcon,
+            !!errorMessage && styles.error,
+          ]}>
+          {!!leftIcon && (
+            <View style={[styles.leftIconContainer]}>{leftIcon}</View>
+          )}
           <RNTextInput
             onFocus={onFocus}
             style={styles.input}
             onChangeText={onChangeText}
+            editable={editable}
             value={value}
             underlineColorAndroid="transparent"
             placeholder={placeholder}
@@ -61,6 +78,9 @@ export const TextInput = React.forwardRef<
             <Icon name={rightIcon} size={16} onPress={onRightIconPress} />
           )}
         </View>
+        {errorMessage && (
+          <Text style={styles.errorMessage}>{errorMessage}</Text>
+        )}
       </View>
     );
   },
@@ -79,6 +99,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  error: {
+    borderColor: Colors.ERROR,
+  },
+  leftIconContainer: {
+    paddingRight: 5,
+  },
+  hasLeftIcon: {
+    paddingHorizontal: 0,
+    paddingLeft: 8,
+    paddingRight: 16,
+  },
+  disabled: {
+    backgroundColor: Colors.LIGHT_GREY,
+  },
   input: {
     ...fontStyles.normal,
     padding: 0,
@@ -88,5 +122,10 @@ const styles = StyleSheet.create({
     ...fontStyles.tiny,
     color: Colors.INPUT_LABEL,
     marginBottom: 4,
+  },
+  errorMessage: {
+    ...fontStyles.tiny,
+    color: Colors.ERROR,
+    marginTop: 4,
   },
 });

@@ -11,3 +11,9 @@ export async function getUser(uid: string) {
 export function addUser(user: User) {
   return instance.collection('users').doc(user.uid).set(user);
 }
+
+export async function updateUserInfo(uid: string, data: Partial<User>) {
+  await instance.collection('users').doc(uid).set(data, { merge: true });
+  const user = await instance.collection('users').doc(uid).get();
+  return user.data() as User;
+}
