@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Pressable } from 'react-native';
 import Header from 'shared/Header';
 import Screen from 'shared/Screen';
@@ -21,54 +21,48 @@ const INVALID_PHONE_NUMBER =
 const INVALID_FIRST_NAME = 'Kötelező mező!';
 const INVALID_LAST_NAME = 'Kötelező mező!';
 
-const getNameError = (
-  name: string | undefined,
-  message: string,
-): string | undefined => {
+const getNameError = (name: string, message: string) => {
   if (!name || !name.length) {
     return message;
   }
 };
 
-const getPhoneNumberError = (
-  phoneNumber: string | undefined,
-): string | undefined => {
+const getPhoneNumberError = (phoneNumber: string | null) => {
   if (phoneNumber && !phoneNumber.match(/^[0-9]{11}$/g)) {
     return INVALID_PHONE_NUMBER;
   }
 };
 
 type UserDetailErrors = {
-  firstName: string | undefined;
-  lastName: string | undefined;
-  phoneNumber: string | undefined;
+  firstName?: string;
+  lastName?: string;
+  phoneNumber?: string;
 };
 
 const PersonalDetails = ({ navigation }: any) => {
   const user = useLoggedInUser() as User;
-  const logout = useLogout();
-  const dispatch = useAppDispatch();
-
   const [localUser, setLocalUser] = useState({ ...user });
   const [dataHasChanged, setDataHasChanged] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  const [errors, setErrors] = useState({
-    firstName: undefined,
-    lastName: undefined,
-    phoneNumber: undefined,
-  } as UserDetailErrors);
+  const logout = useLogout();
+  const dispatch = useAppDispatch();
+
+  const [errors, setErrors] = useState({} as UserDetailErrors);
 
   const [hasError, setHasError] = useState(false);
+  const goToProfile = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
 
-  const saveData = async () => {
+  const saveData = useCallback(async () => {
     if (saving) {
       return;
     }
 
     setSaving(true);
 
-    const newUserData = await updateUserInfo(user?.uid, localUser);
+    const newUserData = await updateUserInfo(user.uid, localUser);
     dispatch(
       setUser({
         ...user,
@@ -79,11 +73,7 @@ const PersonalDetails = ({ navigation }: any) => {
     );
 
     goToProfile();
-  };
-
-  const goToProfile = () => {
-    navigation.goBack();
-  };
+  }, [saving, dispatch, goToProfile]);
 
   useEffect(() => {
     setErrors({
@@ -97,7 +87,7 @@ const PersonalDetails = ({ navigation }: any) => {
         localUser.lastName !== user?.lastName ||
         localUser.phoneNumber !== user.phoneNumber,
     );
-  }, [localUser]);
+  }, [localUser, setErrors, user]);
 
   useEffect(() => {
     // @ts-ignore
@@ -146,7 +136,7 @@ const PersonalDetails = ({ navigation }: any) => {
             leftIcon={<PhoneNumber />}
             label={'Telefonszám'}
             placeholder={'06301122345'}
-            value={localUser.phoneNumber}
+            value={localUser.phoneNumber || ''}
             errorMessage={errors.phoneNumber}
             onChangeText={phoneNumber =>
               setLocalUser(prev => ({ ...prev, phoneNumber }))

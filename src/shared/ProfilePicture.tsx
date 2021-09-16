@@ -1,6 +1,5 @@
 import React from 'react';
 import { Image, ImageStyle, StyleSheet } from 'react-native';
-import profile_picture from 'assets/images/profile_picture.jpg';
 import { Colors } from 'assets/colors';
 
 const ProfilePicture = ({

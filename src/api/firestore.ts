@@ -18,7 +18,10 @@ export function addUserInfo(
   return instance.collection('users').doc(uid).set(data);
 }
 
-export async function updateUserInfo(uid: string, data: {}) {
+export async function updateUserInfo(
+  uid: string,
+  data: Partial<AdditionalUserInfo>,
+) {
   await instance.collection('users').doc(uid).set(data, { merge: true });
   const user = await instance.collection('users').doc(uid).get();
   return user.data() as AdditionalUserInfo;

@@ -1,40 +1,40 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import { Button } from '../shared/Button';
 import Screen from 'shared/Screen';
-import { useCurrentUser } from 'hooks/index';
 import ProfilePicture from 'shared/ProfilePicture';
-import { View, StyleSheet, Text, Pressable } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import fontStyles from 'assets/styles/font';
 import spacing from 'assets/styles/spacing';
 import font from 'assets/styles/font';
 import utilities from 'assets/styles/utilities';
 import { Colors } from 'assets/colors';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import { useNavigation } from '@react-navigation/core';
 import { useMyRoutes } from 'hooks/route';
 import RouteCard from 'shared/RouteCard';
-import { useLoggedInUser, useLogout } from 'hooks/auth';
+import { useLoggedInUser } from 'hooks/auth';
 import Header from 'shared/Header';
 import Wheel from 'shared/figures/Wheel';
+import { User } from 'lifty-types';
 
 const Profile = ({ navigation }: any) => {
-  const user = useLoggedInUser();
+  const user = useLoggedInUser() as User;
   const routes = useMyRoutes();
-  const logout = useLogout();
 
-  const handleRequestNewRoute = () => {
+  const handleRequestNewRoute = useCallback(() => {
     navigation.push('AddRoute');
-  };
+  }, [navigation]);
 
-  const handleEditRouteRequest = (routeId: string) => {
-    navigation.push('AddRoute', {
-      routeId,
-    });
-  };
+  const handleEditRouteRequest = useCallback(
+    (routeId: string) => {
+      navigation.push('AddRoute', {
+        routeId,
+      });
+    },
+    [navigation],
+  );
 
-  const goToProfileSettings = () => {
+  const goToProfileSettings = useCallback(() => {
     navigation.navigate(...['HomeStack', { screen: 'PersonalDetails' }]);
-  };
+  }, [navigation]);
 
   return (
     <Screen
@@ -52,7 +52,7 @@ const Profile = ({ navigation }: any) => {
         <ProfilePicture
           size="big"
           style={spacing.right}
-          src={user!.photoURL || undefined}
+          src={user.photoURL || undefined}
         />
         <Text
           style={

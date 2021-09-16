@@ -1,23 +1,23 @@
 import { Colors } from 'assets/colors';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import BackIcon from 'assets/icons/back.svg';
+import BackArrow from 'shared/figures/BackArrow';
 import { useNavigation } from '@react-navigation/native';
 import fontStyles from 'assets/styles/font';
 
 const Header = ({
   children,
   title,
-  titlePosition = 'center',
+  titlePosition = 'left',
   rightButton,
   withBackButton = true,
   handleRightButtonPress = () => {},
 }: any) => {
   const navigation = useNavigation();
 
-  const handleBackPress = () => {
+  const handleBackPress = useCallback(() => {
     navigation.goBack();
-  };
+  }, [navigation]);
 
   const isCentered = titlePosition === 'center';
   const isLeft = titlePosition === 'left';
@@ -31,7 +31,7 @@ const Header = ({
       ]}>
       {withBackButton && (
         <TouchableOpacity style={[styles.backButton]} onPress={handleBackPress}>
-          <BackIcon />
+          <BackArrow />
         </TouchableOpacity>
       )}
       <Text style={[styles.title]}>{title}</Text>
