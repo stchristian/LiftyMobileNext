@@ -1,14 +1,14 @@
-import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import {useCallback, useEffect, useState} from 'react';
-import {getMyRoutes} from 'src/api/callables';
-import {addUserInfo, getUserInfo} from 'src/api/firestore';
-import {resetStore, setMyRoutes, setUser} from 'src/store/actionCreators';
-import {useAppDispatch, useAppSelector} from './store';
+import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import { useCallback, useEffect, useState } from 'react';
+import { getMyRoutes } from 'src/api/callables';
+import { addUserInfo, getUserInfo } from 'src/api/firestore';
+import { resetStore, setMyRoutes, setUser } from 'src/store/actionCreators';
+import { useAppDispatch, useAppSelector } from './store';
 import {
   GoogleSignin,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
-import {User} from 'src/types/User';
+import { User } from 'src/types/User';
 
 GoogleSignin.configure({
   scopes: [
@@ -97,7 +97,7 @@ export const useGoogleSignin = () => {
       const googleCredential = await auth.GoogleAuthProvider.credential(
         result.idToken,
       );
-      const {additionalUserInfo, user} = await auth().signInWithCredential(
+      const { additionalUserInfo, user } = await auth().signInWithCredential(
         googleCredential,
       );
       if (additionalUserInfo?.isNewUser) {
@@ -130,7 +130,7 @@ export const useGoogleSignin = () => {
     }
   }, []);
 
-  return {inProgress, signIn};
+  return { inProgress, signIn };
 };
 
 export const useLoggedInUser = () => {

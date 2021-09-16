@@ -3,6 +3,7 @@ export type User = {
   email: string;
   photoURL: string;
   displayName: string;
+  phoneNumber: string | null;
 } & AdditionalUserInfo;
 
 export type AdditionalUserInfo = {

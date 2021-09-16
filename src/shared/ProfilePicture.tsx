@@ -1,14 +1,13 @@
 import React from 'react';
-import {Image, ImageStyle, StyleSheet} from 'react-native';
-import profile_picture from 'assets/images/profile_picture.jpg';
-import {Colors} from 'assets/colors';
+import { Image, ImageStyle, StyleSheet } from 'react-native';
+import { Colors } from 'assets/colors';
 
 const ProfilePicture = ({
   src,
   size = 'normal',
   style,
 }: {
-  src: string;
+  src: string | undefined;
   size?: string;
   style?: ImageStyle;
 }) => {
@@ -35,7 +34,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     borderRadius: 300,
     borderWidth: 5,
-    borderColor: Colors.PRIMARY_LIGHT,
+    borderColor: Colors.PRIMARY,
   },
 });
 
