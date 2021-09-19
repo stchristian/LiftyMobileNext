@@ -30,7 +30,11 @@ const Header = ({
         isLeft && styles.alignedLeft,
       ]}>
       {withBackButton && (
-        <TouchableOpacity style={[styles.backButton]} onPress={handleBackPress}>
+        <TouchableOpacity
+          style={[
+            isCentered ? styles.backButtonWithCenteredTitle : styles.backButton,
+          ]}
+          onPress={handleBackPress}>
           <BackArrow />
         </TouchableOpacity>
       )}
@@ -66,6 +70,9 @@ const styles = StyleSheet.create({
     ...fontStyles.title_m,
   },
   backButton: {
+    marginRight: 8,
+  },
+  backButtonWithCenteredTitle: {
     position: 'absolute',
     left: 16,
   },

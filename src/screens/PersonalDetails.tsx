@@ -11,8 +11,8 @@ import { Button } from 'shared/Button';
 import Person from 'shared/figures/Person';
 import PhoneNumber from 'shared/figures/Phone';
 import Email from 'shared/figures/Email';
-import { updateUserInfo } from '../api/firestore';
-import { User } from '../types/User';
+import { updateUser } from '../api/firestore';
+import { User } from 'lifty-types';
 import { useAppDispatch } from 'hooks/store';
 import { setUser } from '../store/actionCreators';
 
@@ -62,7 +62,7 @@ const PersonalDetails = ({ navigation }: any) => {
 
     setSaving(true);
 
-    const newUserData = await updateUserInfo(user.uid, localUser);
+    const newUserData = await updateUser(user.uid, localUser);
     dispatch(
       setUser({
         ...user,
@@ -73,7 +73,7 @@ const PersonalDetails = ({ navigation }: any) => {
     );
 
     goToProfile();
-  }, [saving, dispatch, goToProfile]);
+  }, [saving, dispatch, goToProfile, localUser, user]);
 
   useEffect(() => {
     setErrors({
@@ -100,7 +100,9 @@ const PersonalDetails = ({ navigation }: any) => {
   }
 
   return (
-    <Screen header={<Header title="Beállítások" />} scrollable>
+    <Screen
+      header={<Header title="Beállítások" titlePosition="center" />}
+      scrollable>
       <View style={[styles.profileContainer]}>
         <ProfilePicture
           size="big"
@@ -153,7 +155,7 @@ const PersonalDetails = ({ navigation }: any) => {
             leftIcon={<Email />}
             label={'Email'}
             editable={false}
-            value={localUser?.email}
+            value={localUser.email}
           />
         </View>
         <View style={[styles.input]}>
