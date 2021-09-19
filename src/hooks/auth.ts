@@ -92,6 +92,7 @@ export const useGoogleSignin = () => {
           uid: user.uid,
           phoneNumber: null,
           photoURL: user.photoURL,
+          email: user.email!,
           lastName: additionalUserInfo.profile!.family_name,
           firstName: additionalUserInfo.profile!.given_name,
         });
