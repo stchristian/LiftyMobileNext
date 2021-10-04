@@ -3,16 +3,16 @@ import {
   createStackNavigator,
   StackNavigationProp,
 } from '@react-navigation/stack';
-import {AddRouteParams, AddRouteScreen} from 'screens/AddRoute';
-import AddRideScreen, {AddRideParams} from 'screens/AddRide';
-import RideMatches, {RideMatchesParams} from 'screens/RideMatches';
+import { AddRouteParams, AddRouteScreen } from 'screens/AddRoute';
+import AddRideScreen, { AddRideParams } from 'screens/AddRide';
+import RideMatches, { RideMatchesParams } from 'screens/RideMatches';
 import PersonalDetailsScreen from 'screens/PersonalDetails';
 import LoginScreen from 'screens/Login';
-import {useAuthListener} from 'hooks/auth';
+import { useAuthListener } from 'hooks/auth';
 import TabNavigator from './TabNavigator';
-import {useAppSelector} from 'hooks/store';
+import { useAppSelector } from 'hooks/store';
 import DemoMatches from 'screens/DemoMatches';
-
+import MatchDetails, { MatchDetailsParams } from 'screens/MatchDetails';
 export type HomeStackParamList = {
   AddRoute: AddRouteParams;
   AddRide: AddRideParams;
@@ -23,6 +23,7 @@ export type HomeStackParamList = {
   DemoMatches: {
     routeId: string;
   };
+  MatchDetails: MatchDetailsParams;
 };
 
 export type HomeStackNavigationProp = StackNavigationProp<HomeStackParamList>;
@@ -38,7 +39,7 @@ export default React.memo(() => {
           <HomeStackNavigator.Screen
             name="Tab"
             component={TabNavigator}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
           <HomeStackNavigator.Screen
             name="AddRoute"
@@ -52,30 +53,35 @@ export default React.memo(() => {
             name="AddRide"
             component={AddRideScreen}
             initialParams={{}}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
           <HomeStackNavigator.Screen
             name="RideMatches"
             component={RideMatches}
             initialParams={{}}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
           <HomeStackNavigator.Screen
             name="PersonalDetails"
             component={PersonalDetailsScreen}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
           <HomeStackNavigator.Screen
             name="DemoMatches"
             component={DemoMatches}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
+          />
+          <HomeStackNavigator.Screen
+            name="MatchDetails"
+            component={MatchDetails}
+            options={{ headerShown: false }}
           />
         </>
       ) : (
         <HomeStackNavigator.Screen
           name="Login"
           component={LoginScreen}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
       )}
     </HomeStackNavigator.Navigator>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { View, Text, StyleSheet, Pressable, ViewStyle } from 'react-native';
 import { Colors } from 'src/assets/colors';
 import fontStyles from 'src/assets/styles/font';
@@ -8,6 +8,7 @@ export const Button = ({
   text,
   leftIcon,
   size = 'normal',
+  leftElement,
   fill = false,
   type = 'primary',
   onPress,
@@ -15,6 +16,7 @@ export const Button = ({
   style,
 }: {
   text: string;
+  leftElement?: ReactElement;
   leftIcon?: string;
   size?: 'normal' | 'big';
   fill?: boolean;
@@ -39,6 +41,7 @@ export const Button = ({
           color:
             type === 'primary' ? Colors.PRIMARY_LIGHT : Colors.SECONDARY_LIGHT,
         }}>
+        {leftElement}
         {leftIcon && (
           <Icon size={16} name={leftIcon} style={textStyles[type]} />
         )}

@@ -1,1 +1,1 @@
-export {default} from './AddRide';
+export { default } from './AddRide';

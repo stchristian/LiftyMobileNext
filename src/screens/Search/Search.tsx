@@ -13,7 +13,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import { Colors } from 'assets/colors';
 import padding from 'assets/styles/padding';
 
-const Community = () => {
+const Community = ({ navigation }: any) => {
   const [selectedRouteId, setSelectedRouteId] = useState<null | string>(null);
   const [matches, setMatches] = useState<Match[]>([]);
   const myRoutes = useMyRoutes();
@@ -33,15 +33,33 @@ const Community = () => {
     setMatches(results);
   }, []);
 
-  const renderItem = useCallback<ListRenderItem<Match>>(({ item }) => {
-    return (
-      <MatchCard
-        style={styles.cardStyle}
-        photoURL={item.user.photoURL !== null ? item.user.photoURL : undefined}
-        firstName={item.user.firstName}
-      />
-    );
-  }, []);
+  const handleCardPressed = useCallback(
+    (match: Match) => {
+      navigation.push('MatchDetails', {
+        userFullName: `${match.user.lastName} ${match.user.firstName}`,
+        phoneNumber: match.user.phoneNumber,
+        userPhotoURL: match.user.photoURL,
+        route: match,
+      });
+    },
+    [navigation],
+  );
+
+  const renderItem = useCallback<ListRenderItem<Match>>(
+    ({ item }) => {
+      return (
+        <MatchCard
+          onPress={() => handleCardPressed(item)}
+          style={styles.cardStyle}
+          photoURL={
+            item.user.photoURL !== null ? item.user.photoURL : undefined
+          }
+          firstName={item.user.firstName}
+        />
+      );
+    },
+    [handleCardPressed],
+  );
 
   return (
     <Screen header={<Header title="Keresés" withBackButton={false} />}>
