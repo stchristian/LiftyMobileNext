@@ -1,6 +1,11 @@
 import axios from 'axios';
 import config from '../config';
 
+//ATTENTION: BEFORE IMPLEMENTING ANY API CALLS CHECK IF API KEY IS ALLOWED TO ACCESS THAT API IN GOOGLE CONSOLE
+//ALLOWED APIS:
+// - DIRECTIONs
+// - PLACES
+
 const googleApi = axios.create({
   baseURL: config.GOOGLE_API_BASE_URL,
   params: {

@@ -1,13 +1,14 @@
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { useCallback, useEffect, useState } from 'react';
-import { getMyRoutes } from 'src/api/callables';
 import { addUser, getUser } from 'src/api/firestore';
-import { resetStore, setMyRoutes, setUser } from 'src/store/actionCreators';
+import { resetStore, setUser } from 'src/store/actionCreators';
 import { useAppDispatch, useAppSelector } from './store';
 import {
   GoogleSignin,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
+import { useFetchMyRoutes } from './route';
+import config from 'src/config';
 
 GoogleSignin.configure({
   scopes: [
@@ -19,6 +20,12 @@ GoogleSignin.configure({
   offlineAccess: false, // if you want to access Google API on behalf of the user FROM YOUR SERVER
 });
 
+// if (__DEV__) {
+//   auth().useEmulator(
+//     `http://${config.EMULATOR_HOST}:${config.EMULATOR_AUTH_PORT}`,
+//   );
+// }
+
 const authInstance = auth();
 
 /**
@@ -26,10 +33,11 @@ const authInstance = auth();
  */
 export const useAuthListener = () => {
   const dispatch = useAppDispatch();
+  const fetchMyRoutes = useFetchMyRoutes();
   const onAuthStateChanged: FirebaseAuthTypes.AuthListenerCallback =
     useCallback(
       async firebaseUser => {
-        console.log('AUTH STATE CHANGED', !!firebaseUser);
+        console.log('AUTH STATE CHANGED', firebaseUser);
         if (firebaseUser === null) {
           return dispatch(setUser(null));
         }
@@ -37,15 +45,12 @@ export const useAuthListener = () => {
         //When you first log in with google, firebase auth listener fires but the saving of additional data might not have been finished.
         // We wait a little here in order to save the addition user data to firebase
         setTimeout(async () => {
-          const [user, routes] = await Promise.all([
-            getUser(firebaseUser.uid),
-            getMyRoutes(),
-          ]);
+          const [user] = await Promise.all([getUser(firebaseUser.uid)]);
+          fetchMyRoutes();
           dispatch(setUser(user));
-          dispatch(setMyRoutes(routes));
         }, 1000);
       },
-      [dispatch],
+      [dispatch, fetchMyRoutes],
     );
 
   useEffect(() => {

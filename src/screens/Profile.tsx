@@ -8,8 +8,8 @@ import spacing from 'assets/styles/spacing';
 import font from 'assets/styles/font';
 import utilities from 'assets/styles/utilities';
 import { Colors } from 'assets/colors';
-import { useMyRoutes } from 'hooks/route';
-import RouteCard from 'shared/RouteCard';
+import { useMyRoutes, useMyRoutesFetchingState } from 'hooks/route';
+import { RouteCard, SkeletonRouteCard } from 'shared/RouteCard';
 import { useLoggedInUser } from 'hooks/auth';
 import Header from 'shared/Header';
 import Wheel from 'shared/figures/Wheel';
@@ -18,7 +18,8 @@ import { User } from 'lifty-types';
 const Profile = ({ navigation }: any) => {
   const user = useLoggedInUser() as User;
   const routes = useMyRoutes();
-
+  const fetching = useMyRoutesFetchingState();
+  console.log(fetching);
   const handleRequestNewRoute = useCallback(() => {
     navigation.push('AddRoute');
   }, [navigation]);
@@ -69,7 +70,12 @@ const Profile = ({ navigation }: any) => {
         <Button leftIcon="add" text="Autó" type="secondary" />
       </View>
       <Text style={[font.small, font.muted, spacing.bottom_s]}>Útvonalak</Text>
-      {routes.length > 0 ? (
+      {fetching ? (
+        <>
+          <SkeletonRouteCard style={spacing.bottom} />
+          <SkeletonRouteCard />
+        </>
+      ) : routes.length > 0 ? (
         routes.map(route => (
           <RouteCard
             route={route}

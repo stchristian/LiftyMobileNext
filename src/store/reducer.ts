@@ -4,6 +4,7 @@ import * as actionsCreators from './actionCreators';
 
 const initialState = {
   routes: [] as Route[],
+  routesFetching: false,
   user: null as User | null,
   userSetAt: null as Date | null,
 };
@@ -19,7 +20,11 @@ export default function (state = initialState, action: Action) {
         ...state,
         routes: action.payload,
       };
-
+    case ActionTypes.SET_ROUTES_FETCHING:
+      return {
+        ...state,
+        routesFetching: action.payload,
+      };
     case ActionTypes.UPDATE_ROUTE:
       return {
         ...state,

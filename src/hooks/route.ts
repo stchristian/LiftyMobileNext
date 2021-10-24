@@ -1,9 +1,16 @@
 import { useCallback, useMemo, useState, useEffect } from 'react';
-import { addRoute, deleteRoute, updateRoute } from 'src/store/actionCreators';
+import {
+  addRoute,
+  deleteRoute,
+  setMyRoutes,
+  setRoutesFetching,
+  updateRoute,
+} from 'src/store/actionCreators';
 import {
   addRoute as addRouteCallable,
   getMatches,
   deleteRoute as deleteRouteCallable,
+  getMyRoutes,
 } from 'src/api/callables';
 import { useAppSelector, useAppDispatch } from './store';
 import { getDirections } from 'src/api/google';
@@ -31,8 +38,28 @@ export const useAddRouteRequest = () => {
   );
 };
 
+export const useFetchMyRoutes = () => {
+  const dispatch = useAppDispatch();
+
+  return useCallback(async () => {
+    try {
+      dispatch(setRoutesFetching(true));
+      const routes = await getMyRoutes();
+      dispatch(setMyRoutes(routes));
+    } catch (error) {
+    } finally {
+      dispatch(setRoutesFetching(false));
+    }
+  }, [dispatch]);
+};
+
 export const useMyRoutes = () => {
   const routes = useAppSelector(state => state.routes);
+  return routes;
+};
+
+export const useMyRoutesFetchingState = () => {
+  const routes = useAppSelector(state => state.routesFetching);
   return routes;
 };
 

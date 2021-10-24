@@ -1,14 +1,14 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {StyleSheet, View, ScrollView, Text} from 'react-native';
-import {TextInput} from '../shared/TextInput';
-import MapView from '../shared/MapView';
-import {Button} from '../shared/Button';
-import spacingStyles from '../assets/styles/spacing';
-import {AddRouteProps} from '../navigation/Props';
+import React, { useCallback, useMemo, useState } from 'react';
+import { StyleSheet, View, Text } from 'react-native';
+import { TextInput } from '../../shared/TextInput';
+import MapView from '../../shared/MapView';
+import { Button } from '../../shared/Button';
+import spacingStyles from '../../assets/styles/spacing';
+import { AddRouteProps } from '../../navigation/Props';
 import Header from 'shared/Header';
 import Screen from 'shared/Screen';
-import {Marker, Polyline} from 'react-native-maps';
-import {Colors} from 'assets/colors';
+import { Marker, Polyline } from 'react-native-maps';
+import { Colors } from 'assets/colors';
 import {
   useAddRouteRequest,
   useDecodedPolyline,
@@ -16,10 +16,11 @@ import {
   useRouteById,
   useRoutePolyline,
 } from 'hooks/route';
-import {StackActions} from '@react-navigation/routers';
-import spacing from '../assets/styles/spacing';
+import { StackActions } from '@react-navigation/routers';
+import spacing from '../../assets/styles/spacing';
 import font from 'assets/styles/font';
 import utilities from 'assets/styles/utilities';
+import { getRouteGeoData } from 'src/utils/route';
 
 export type AddRouteParams = {
   source?: any;
@@ -31,20 +32,11 @@ export const AddRouteScreen = React.memo(
   ({
     navigation,
     route: {
-      params: {routeId, source, destination},
+      params: { routeId, source, destination },
     },
   }: AddRouteProps) => {
     const routeToEdit = useRouteById(routeId);
     const inEditMode = !!routeToEdit;
-
-    console.debug('Add Route Render', navigation.isFocused());
-
-    useEffect(() => {
-      console.debug('Add Route mounted');
-      return () => {
-        console.debug('Add route unmounted');
-      };
-    }, []);
 
     const [name, setName] = useState(inEditMode ? routeToEdit!.name : '');
 
@@ -86,7 +78,7 @@ export const AddRouteScreen = React.memo(
       if (routeToEdit) {
         const {
           geoData: {
-            origin: {coordinates},
+            origin: { coordinates },
           },
         } = routeToEdit;
         return {
@@ -107,7 +99,7 @@ export const AddRouteScreen = React.memo(
       if (routeToEdit) {
         const {
           geoData: {
-            destination: {coordinates},
+            destination: { coordinates },
           },
         } = routeToEdit;
         return {
@@ -119,11 +111,11 @@ export const AddRouteScreen = React.memo(
     }, [routeToEdit, destination]);
 
     const handleSourceFocus = () => {
-      navigation.navigate('LocationFinder', {resultKey: 'source'});
+      navigation.navigate('LocationFinder', { resultKey: 'source' });
     };
 
     const handleDestinationFocus = () => {
-      navigation.navigate('LocationFinder', {resultKey: 'destination'});
+      navigation.navigate('LocationFinder', { resultKey: 'destination' });
     };
 
     const handleAddRoute = useCallback(async () => {
@@ -133,9 +125,10 @@ export const AddRouteScreen = React.memo(
         destinationAddress: destination?.formatted_address,
         originGooglePlaceId: source?.place_id,
         destinationGooglePlaceId: destination?.place_id,
-        polyline,
+        polyline: polyline!,
+        geoData: getRouteGeoData(polyline!),
       });
-      navigation.navigate('Tab', {screen: 'Profile', params: {}});
+      navigation.navigate('Tab', { screen: 'Profile', params: {} });
     }, [source, destination, name, navigation, polyline, addRouteRequest]);
 
     return (
@@ -198,7 +191,7 @@ export const AddRouteScreen = React.memo(
                 onPress={() => {
                   //@ts-ignore
                   navigation.dispatch(
-                    StackActions.replace('DemoMatches', {routeId}),
+                    StackActions.replace('DemoMatches', { routeId }),
                   );
                 }}
                 style={spacing.bottom}

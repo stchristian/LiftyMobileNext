@@ -32,3 +32,7 @@ export function resetStore() {
 export function deleteRoute(routeId: string) {
   return createAction(ActionTypes.DELETE_ROUTE, routeId);
 }
+
+export function setRoutesFetching(value: boolean) {
+  return createAction(ActionTypes.SET_ROUTES_FETCHING, value);
+}

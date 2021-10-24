@@ -1,5 +1,11 @@
 import firestore from '@react-native-firebase/firestore';
 import { User } from 'lifty-types';
+import config from 'src/config';
+
+// if (__DEV__) {
+//   console.log(typeof firestore().useEmulator);
+//   firestore().useEmulator(config.EMULATOR_HOST, config.EMULATOR_FIRESTORE_PORT);
+// }
 
 const instance = firestore();
 

@@ -1,10 +1,9 @@
 import React from 'react';
-import {View, Text, StyleSheet, ViewStyle} from 'react-native';
+import { View, Text, StyleSheet, ViewStyle, StyleProp } from 'react-native';
 import fontStyles from 'assets/styles/font';
 import spacingStyles from 'assets/styles/spacing';
-import {Colors} from 'assets/colors';
+import { Colors } from 'assets/colors';
 import CircleFill from './figures/CircleFill';
-import CircleOutline from './figures/CircleOutline';
 
 const RoutePresenter = ({
   from,
@@ -14,13 +13,13 @@ const RoutePresenter = ({
 }: {
   from: string;
   to: string;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   type?: 'primary' | 'secondary';
 }) => {
   return (
     <View style={style}>
       <View style={styles.row}>
-        <CircleFill fill={Colors.ON_SECONDARY} />
+        <CircleFill fill={Colors.BLACK} />
         <Text
           style={[
             fontStyles.tiny,
@@ -31,7 +30,7 @@ const RoutePresenter = ({
         </Text>
       </View>
       <View style={styles.row}>
-        <CircleOutline color={Colors.ON_SECONDARY} />
+        <CircleFill fill={Colors.ON_SECONDARY} />
         <Text
           style={[
             fontStyles.tiny,

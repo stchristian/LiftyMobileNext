@@ -13,9 +13,13 @@ import {
 } from 'lifty-types';
 import config from '../config';
 
-if (__DEV__) {
-  firebase.functions().useFunctionsEmulator(config.DEV_FUNCTIONS_EMULATOR_URL);
-}
+// if (__DEV__) {
+//   firebase
+//     .functions()
+//     .useFunctionsEmulator(
+//       `http://${config.EMULATOR_HOST}:${config.EMULATOR_FUNCTIONS_PORT}`,
+//     );
+// }
 
 const module: FirebaseFunctionsTypes.Module = firebase.functions();
 export async function addRoute(route: AddRouteRequest) {
